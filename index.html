@@ -105,7 +105,7 @@ a { color: inherit; text-decoration: none; }
    PANELS
 ══════════════════════════════════════ */
 #panels {
-  height: calc(100vh - 52px);
+  height: calc(100vh - 52px - 36px);
   position: relative;
 }
 .panel {
@@ -521,9 +521,55 @@ h1.name em {
   .panel-header .ph-desc { flex-basis: auto; border-left: none; padding-left: 0; }
   .panel-body { padding: 1.5rem; grid-template-columns: 1fr; }
 }
+
+/* ══════════════════════════════════════
+   CONSTRUCTION BANNER — DELETE THIS WHOLE BLOCK
+   (and the matching HTML element below)
+   when the site goes live
+══════════════════════════════════════ */
+#construction-banner {
+  background: repeating-linear-gradient(
+    135deg,
+    #F5B800 0 18px,
+    #18170F 18px 36px
+  );
+  color: #fff;
+  padding: 0.55rem 1rem;
+  text-align: center;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 20;
+  border-bottom: 2px solid #18170F;
+}
+#construction-banner span {
+  background: #18170F;
+  color: #F5B800;
+  padding: 0.4rem 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  letter-spacing: 0.22em;
+}
+#construction-banner svg {
+  width: 14px; height: 14px; flex-shrink: 0;
+}
 </style>
 </head>
 <body>
+
+<!-- ▼▼▼ DELETE THIS WHOLE <div> WHEN SITE GOES LIVE ▼▼▼ -->
+<div id="construction-banner">
+  <span>
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+    Website Under Construction
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+  </span>
+</div>
+<!-- ▲▲▲ DELETE UP TO HERE ▲▲▲ -->
 
 <!-- RIBBON -->
 <header id="ribbon">
