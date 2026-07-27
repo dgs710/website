@@ -821,6 +821,92 @@ footer p b { color: var(--accent); font-weight: 400; }
 .helix-launch-desc { font-size: 0.84rem; font-weight: 300; line-height: 1.85; color: var(--ink-muted); margin-bottom: 1.3rem; }
 .helix-note { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.08em; color: var(--ink-muted); margin-top: 0.9rem; }
 
+/* ─── HELIX overview document ─── */
+.helix-doc {
+  padding: clamp(1.4rem, 3.5vh, 2.4rem) 0 clamp(2.4rem, 5vh, 3.6rem);
+  display: flex; flex-direction: column; gap: 1.6rem;
+  max-width: 1040px; margin: 0 auto;
+}
+.helix-figure {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #F7F9FB;                 /* light frame — the panels are light-themed */
+  padding: 0.6rem;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.helix-figure:hover {
+  border-color: var(--line-acc);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.45), 0 0 30px rgba(52,211,153,0.06);
+}
+.helix-figure img { width: 100%; height: auto; border-radius: 8px; display: block; }
+.helix-figure figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-muted); text-align: center;
+  padding: 0.7rem 0.4rem 0.3rem;
+}
+
+/* numbers flow band */
+.helix-flow {
+  display: flex; align-items: stretch; justify-content: center;
+  gap: 0.6rem; flex-wrap: wrap;
+}
+.hf-node {
+  flex: 1; min-width: 130px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); padding: 1rem 1.1rem; text-align: center;
+}
+.hf-node.accent { border-color: var(--line-acc); background: rgba(52,211,153,0.06); }
+.hf-node b {
+  font-family: var(--font-head); font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 700; color: var(--ink); display: block; line-height: 1.1;
+}
+.hf-node.accent b { color: var(--accent); text-shadow: 0 0 22px var(--glow); }
+.hf-node span {
+  font-family: var(--font-mono); font-size: 0.56rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-muted);
+  display: block; margin-top: 0.4rem; line-height: 1.5;
+}
+.hf-arrow { display: flex; align-items: center; color: var(--accent); font-size: 1.2rem; }
+
+/* phase headers */
+.helix-phase {
+  margin-top: 1rem; padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--line);
+}
+.hp-num {
+  font-family: var(--font-mono); font-size: 0.58rem;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent);
+  display: inline-flex; align-items: center; gap: 0.6rem;
+}
+.hp-num::before { content: ''; width: 24px; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); }
+.helix-phase h3 {
+  font-family: var(--font-head); font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  font-weight: 600; margin: 0.5rem 0 0.4rem;
+}
+.helix-phase p {
+  font-size: 0.82rem; font-weight: 300; line-height: 1.75;
+  color: var(--ink-muted); max-width: 70ch; margin-bottom: 0.6rem;
+}
+.helix-steps {
+  display: grid; gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+.helix-steps.single { grid-template-columns: 1fr; }
+.helix-footline {
+  margin-top: 0.6rem;
+  font-family: var(--font-mono); font-size: 0.62rem;
+  letter-spacing: 0.06em; line-height: 1.9; color: var(--ink-muted);
+  text-align: center; padding: 1rem 0 0; border-top: 1px solid var(--line);
+}
+@media (max-width: 720px) {
+  .helix-steps { grid-template-columns: 1fr; }
+  .hf-arrow { transform: rotate(90deg); }
+}
+
 /* ─── Walking AI mascot ─── */
 #walker {
   position: fixed; bottom: 14px; left: 0; z-index: 40;
@@ -1505,37 +1591,117 @@ footer p b { color: var(--accent); font-weight: 400; }
             <h2>HELIX <em>Image Analysis</em></h2>
           </div>
           <p class="ph-desc">
-            Crystal-Tools v8 · High-throughput segmentation and melting-temperature
-            analysis for DNA-origami crystals. CFN — Automated Image Analysis.
+            Crystal-Tools v8 · From <b style="color:var(--ink-mid);">11,160</b> optical-microscopy
+            images to one melting temperature per well — segmented, measured and fitted
+            automatically. CFN Automated Image Analysis.
           </p>
         </div>
-        <div class="panel-body" style="grid-template-columns:1fr; max-width:940px;">
+
+        <div class="helix-doc">
+
+          <!-- Launch status -->
           <div class="helix-launch reveal">
-            <div class="helix-launch-inner">
-              <div class="helix-status" id="helix-status">
-                <span class="dot-live"></span> Tool endpoint not yet connected
-              </div>
-              <p class="helix-launch-desc">
-                The HELIX interface will open here once the app is deployed. The engine
-                performs GPU segmentation (FastSAM), Boltzmann melting-curve fits, and
-                sensitivity trend analysis on plate-scanned microscope images.
-              </p>
-              <a href="#" id="helix-launch-btn" class="pill solid" style="pointer-events:none; opacity:0.5;">
-                Launch HELIX →
-              </a>
-              <p class="helix-note">
-                Setup in progress — the live app link will be wired in here.
-              </p>
+            <div class="helix-status" id="helix-status">
+              <span class="dot-live"></span> Live tool not yet connected — overview below
             </div>
-          </div>
-          <div class="helix-launch reveal">
-            <h3 style="font-family:var(--font-head); font-size:1.05rem; margin-bottom:0.7rem;">Workflow</h3>
-            <p style="font-size:0.82rem; color:var(--ink-muted); line-height:1.9;">
-              <b style="color:var(--accent);">Setup</b> — pick wells on an interactive 96/384 plate, set folders &amp; temperatures.
-              <b style="color:var(--accent);">Run</b> — launch the overnight batch, resume-safe.
-              <b style="color:var(--accent);">Results</b> — explore melting curves, ranked T<sub>m</sub> bars, and °C/M sensitivity fits.
+            <p class="helix-launch-desc">
+              The interactive HELIX application will open here once it is deployed. For now,
+              this page walks through exactly what the pipeline does, end to end. The engine
+              performs GPU segmentation (FastSAM), Boltzmann melting-curve fits, and
+              denaturant-sensitivity analysis on plate-scanned microscope images.
             </p>
+            <a href="#" id="helix-launch-btn" class="pill solid" style="pointer-events:none; opacity:0.45;">
+              Launch HELIX →
+            </a>
           </div>
+
+          <!-- Hero master scheme -->
+          <figure class="helix-figure reveal">
+            <a href="Images/helix/master_scheme.jpg" target="_blank" title="Open full size">
+              <img src="Images/helix/master_scheme.jpg" alt="Automated imaging-to-melting-temperature pipeline for DNA-origami crystals" loading="lazy" />
+            </a>
+            <figcaption>The full pipeline at a glance — click any figure to open it full size.</figcaption>
+          </figure>
+
+          <!-- Numbers band -->
+          <div class="helix-flow reveal">
+            <div class="hf-node"><b>11,160</b><span>raw .tif images</span></div>
+            <div class="hf-arrow">→</div>
+            <div class="hf-node"><b>5,580</b><span>in-focus (1 of 2)</span></div>
+            <div class="hf-arrow">→</div>
+            <div class="hf-node"><b>1,860</b><span>data points (3 ROIs avg)</span></div>
+            <div class="hf-arrow">→</div>
+            <div class="hf-node accent"><b>60</b><span>melting curves → 60 T<sub>m</sub></span></div>
+          </div>
+
+          <!-- ─── PHASE 1 ─── -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">Phase 01</span>
+            <h3>Image analysis</h3>
+            <p>Every raw field is focus-selected, segmented crystal-by-crystal, and measured.</p>
+          </div>
+          <div class="helix-steps">
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step1_acquisition.jpg" target="_blank"><img src="Images/helix/step1_acquisition.jpg" alt="Step 1 — Automated acquisition" loading="lazy" /></a>
+            </figure>
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step2_focus.jpg" target="_blank"><img src="Images/helix/step2_focus.jpg" alt="Step 2 — Focus selection" loading="lazy" /></a>
+            </figure>
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step3_segmentation.jpg" target="_blank"><img src="Images/helix/step3_segmentation.jpg" alt="Step 3 — Segmentation with FastSAM" loading="lazy" /></a>
+            </figure>
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step4_measure.jpg" target="_blank"><img src="Images/helix/step4_measure.jpg" alt="Step 4 — Measuring edge length" loading="lazy" /></a>
+            </figure>
+          </div>
+
+          <!-- ─── PHASE 2 ─── -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">Phase 02</span>
+            <h3>Aggregation &amp; melting temperature</h3>
+            <p>The three ROIs collapse into one melting curve per well; a Boltzmann fit gives T<sub>m</sub>, and empty wells are caught automatically.</p>
+          </div>
+          <div class="helix-steps">
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step5_aggregate.jpg" target="_blank"><img src="Images/helix/step5_aggregate.jpg" alt="Step 5 — Aggregating ROIs into a melting curve" loading="lazy" /></a>
+            </figure>
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step6_tm.jpg" target="_blank"><img src="Images/helix/step6_tm.jpg" alt="Step 6 — Boltzmann fit to melting temperature" loading="lazy" /></a>
+            </figure>
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step7_qc.jpg" target="_blank"><img src="Images/helix/step7_qc.jpg" alt="Step 7 — Automatic no-crystal quality control" loading="lazy" /></a>
+            </figure>
+          </div>
+
+          <!-- ─── PHASE 3 ─── -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">Phase 03</span>
+            <h3>Population analysis</h3>
+            <p>Across the plate, melting points are ranked and their response to denaturant concentration is quantified in °C per molar.</p>
+          </div>
+          <div class="helix-steps single">
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step8_population.jpg" target="_blank"><img src="Images/helix/step8_population.jpg" alt="Step 8 — Population analysis: ranked Tm and denaturant response" loading="lazy" /></a>
+            </figure>
+          </div>
+
+          <!-- ─── THE APP ─── -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">The application</span>
+            <h3>One app runs it all</h3>
+            <p>Setup → Run → Results in a single window — resume-safe overnight analysis, and every figure styleable and exportable (PNG / PDF / SVG + CSV).</p>
+          </div>
+          <div class="helix-steps single">
+            <figure class="helix-figure step reveal">
+              <a href="Images/helix/step9_app.jpg" target="_blank"><img src="Images/helix/step9_app.jpg" alt="Step 9 — The HELIX app: Setup, Run, Results" loading="lazy" /></a>
+            </figure>
+          </div>
+
+          <p class="helix-footline reveal">
+            6 colors × 10 wells × 31 temperatures (25–55 °C) × 3 ROIs × 2 exposures = 11,160 .tif
+            &nbsp;·&nbsp; 3 ROIs averaged → 31 points per well → Boltzmann melting curve → T<sub>m</sub>
+          </p>
+
         </div>
       </div>
 
