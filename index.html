@@ -821,54 +821,123 @@ footer p b { color: var(--accent); font-weight: 400; }
 .helix-launch-desc { font-size: 0.84rem; font-weight: 300; line-height: 1.85; color: var(--ink-muted); margin-bottom: 1.3rem; }
 .helix-note { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.08em; color: var(--ink-muted); margin-top: 0.9rem; }
 
-/* ─── Floating AI mascot ─── */
-#mascot {
-  position: fixed; right: 22px; bottom: 22px; z-index: 40;
-  display: none; align-items: flex-end; gap: 0.6rem;
+/* ─── Walking AI mascot ─── */
+#walker {
+  position: fixed; bottom: 14px; left: 0; z-index: 40;
+  width: 76px; height: 104px;
+  --x: 60px;
+  transform: translateX(var(--x));
+  display: none;
   cursor: pointer;
-  animation: mascot-in 0.6s cubic-bezier(0.22,1,0.36,1);
+  --face: 1;             /* 1 = facing right, -1 = facing left */
+  will-change: transform;
 }
-#mascot.show { display: flex; }
-@keyframes mascot-in { from { opacity: 0; transform: translateY(30px) scale(0.8); } to { opacity: 1; transform: none; } }
-.mascot-bubble {
-  max-width: 210px;
-  background: var(--glass);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--line-acc); border-radius: 14px 14px 4px 14px;
-  padding: 0.7rem 0.9rem;
-  font-size: 0.74rem; line-height: 1.5; color: var(--ink-mid);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
-  opacity: 0; transform: translateY(6px) scale(0.96);
-  transition: opacity 0.35s, transform 0.35s;
-  margin-bottom: 8px;
+#walker.show { display: block; }
+#walker .walker-char {
+  position: absolute; bottom: 8px; left: 0;
+  width: 76px; height: 96px;
+  transform: scaleX(var(--face));
+  transform-origin: 50% 100%;
+  transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
 }
-.mascot-bubble.show { opacity: 1; transform: none; }
-.mascot-bubble b { color: var(--accent); font-weight: 600; }
-.mascot-figure {
-  position: relative;
-  width: 66px; height: 66px; flex-shrink: 0;
-  animation: mascot-bob 3s ease-in-out infinite;
+/* bob while walking */
+#walker.walking .walker-char { animation: w-bob 0.5s ease-in-out infinite; }
+@keyframes w-bob { 0%,100% { transform: scaleX(var(--face)) translateY(0); } 50% { transform: scaleX(var(--face)) translateY(-4px); } }
+
+.w-head {
+  position: absolute; top: 0; left: 50%; margin-left: -26px;
+  width: 52px; height: 52px; z-index: 3;
 }
-.mascot-figure img {
+.w-head img {
   width: 100%; height: 100%; object-fit: cover;
   border-radius: 50%;
   border: 2px solid var(--accent);
-  box-shadow: 0 0 24px rgba(52,211,153,0.3);
+  box-shadow: 0 0 20px rgba(52,211,153,0.35);
+  background: var(--bg-2);
 }
-.mascot-close {
-  position: absolute; top: -6px; right: -6px;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: var(--bg-2); border: 1px solid var(--line);
-  color: var(--ink-muted); font-size: 0.7rem;
-  display: flex; align-items: center; justify-content: center;
-  line-height: 1;
+.w-body {
+  position: absolute; top: 46px; left: 50%; margin-left: -19px;
+  width: 38px; height: 40px; z-index: 2;
+  background: linear-gradient(160deg, #14324a, #0d2032);
+  border: 1.5px solid var(--line-acc);
+  border-radius: 16px 16px 12px 12px;
 }
-@keyframes mascot-bob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-7px) rotate(2deg); } }
+.w-arm {
+  position: absolute; top: 5px; width: 7px; height: 22px;
+  background: linear-gradient(160deg, #14324a, #0d2032);
+  border: 1.5px solid var(--line-acc); border-radius: 6px;
+  transform-origin: top center;
+}
+.w-arm.left  { left: -7px; }
+.w-arm.right { right: -7px; }
+#walker.walking .w-arm.left  { animation: w-swingA 0.5s ease-in-out infinite; }
+#walker.walking .w-arm.right { animation: w-swingB 0.5s ease-in-out infinite; }
+@keyframes w-swingA { 0%,100% { transform: rotate(18deg); } 50% { transform: rotate(-18deg); } }
+@keyframes w-swingB { 0%,100% { transform: rotate(-18deg); } 50% { transform: rotate(18deg); } }
+.w-legs {
+  position: absolute; top: 84px; left: 50%; margin-left: -15px;
+  width: 30px; height: 16px; z-index: 1;
+}
+.w-leg {
+  position: absolute; top: 0; width: 8px; height: 15px;
+  background: linear-gradient(160deg, #12293b, #0a1826);
+  border: 1.5px solid var(--line-acc); border-radius: 4px 4px 5px 5px;
+  transform-origin: top center;
+}
+.w-leg.left  { left: 1px; }
+.w-leg.right { right: 1px; }
+#walker.walking .w-leg.left  { animation: w-stepA 0.5s ease-in-out infinite; }
+#walker.walking .w-leg.right { animation: w-stepB 0.5s ease-in-out infinite; }
+@keyframes w-stepA { 0%,100% { transform: rotate(20deg); } 50% { transform: rotate(-20deg); } }
+@keyframes w-stepB { 0%,100% { transform: rotate(-20deg); } 50% { transform: rotate(20deg); } }
+
+.walker-shadow {
+  position: absolute; bottom: 2px; left: 50%; margin-left: -24px;
+  width: 48px; height: 9px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.5), transparent 70%);
+  z-index: 0;
+  transition: opacity 0.4s, transform 0.4s;
+}
+#walker.walking .walker-shadow { animation: w-shadow 0.5s ease-in-out infinite; }
+@keyframes w-shadow { 0%,100% { transform: scaleX(1); opacity: 0.6; } 50% { transform: scaleX(0.8); opacity: 0.4; } }
+
+/* fallen state */
+#walker.fallen .walker-char {
+  animation: none !important;
+  transform: scaleX(var(--face)) translateY(34px) rotate(calc(var(--face) * 82deg));
+  transition: transform 0.45s cubic-bezier(0.34,1.4,0.64,1);
+}
+#walker.fallen .walker-shadow { transform: scaleX(1.3); opacity: 0.35; }
+.w-dizzy {
+  position: absolute; top: -14px; left: 50%; margin-left: -18px;
+  font-size: 0.9rem; opacity: 0; pointer-events: none;
+  z-index: 5;
+}
+#walker.fallen .w-dizzy { opacity: 1; animation: w-spin 1s linear infinite; }
+@keyframes w-spin { to { transform: rotate(360deg); } }
+
+.walker-bubble {
+  position: absolute; bottom: 100px; left: 50%;
+  transform: translate(-50%, 8px) scale(0.95);
+  width: max-content; max-width: 220px;
+  background: var(--glass);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--line-acc); border-radius: 14px 14px 14px 4px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.74rem; line-height: 1.5; color: var(--ink-mid);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  opacity: 0; transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+.walker-bubble.show { opacity: 1; transform: translate(-50%, 0) scale(1); }
+.walker-bubble.left-anchor { border-radius: 14px 14px 4px 14px; }
+.walker-bubble b { color: var(--accent); font-weight: 600; }
 
 @media (max-width: 820px) {
   .hint-desktop { display: none; }
   .hint-mobile { display: inline; }
   #nav-toggle { display: flex; }
+  #walker { transform: translateX(var(--x)) scale(0.8); transform-origin: left bottom; }
   .ribbon-inner { position: relative; }
   .ribbon-tabs {
     position: absolute; top: 100%; left: 0; right: 0;
@@ -890,8 +959,7 @@ footer p b { color: var(--accent); font-weight: 400; }
     font-size: 0.7rem;
   }
   .ribbon-tabs li a.active { border-bottom-color: var(--line-soft); border-left-color: var(--accent); }
-  #mascot { right: 14px; bottom: 14px; }
-  .mascot-bubble { max-width: 160px; font-size: 0.68rem; }
+  .walker-bubble { max-width: 170px; font-size: 0.68rem; }
 }
 </style>
 </head>
@@ -1485,13 +1553,24 @@ footer p b { color: var(--accent); font-weight: 400; }
 
 </div><!-- /#site -->
 
-<!-- FLOATING AI MASCOT -->
-<div id="mascot" aria-hidden="true">
-  <div class="mascot-bubble" id="mascot-bubble"></div>
-  <div class="mascot-figure">
-    <div class="mascot-close" id="mascot-close" title="Hide">✕</div>
-    <img src="Images/Avatar_David.jpg" alt="AI David mascot" />
+<!-- WALKING AI MASCOT -->
+<div id="walker" aria-hidden="true">
+  <div class="walker-bubble" id="walker-bubble"></div>
+  <div class="walker-char" id="walker-char">
+    <div class="w-dizzy">💫</div>
+    <div class="w-head">
+      <img src="Images/Avatar_David.jpg" alt="AI David mascot" />
+    </div>
+    <div class="w-body">
+      <span class="w-arm left"></span>
+      <span class="w-arm right"></span>
+    </div>
+    <div class="w-legs">
+      <span class="w-leg left"></span>
+      <span class="w-leg right"></span>
+    </div>
   </div>
+  <div class="walker-shadow"></div>
 </div>
 
 <script>
@@ -1585,42 +1664,99 @@ document.getElementById('flip-card').addEventListener('click', function () {
   });
 })();
 
-/* ═══ FLOATING AI MASCOT ═══ */
+/* ═══ WALKING AI MASCOT ═══ */
 (function () {
-  const mascot = document.getElementById('mascot');
-  const bubble = document.getElementById('mascot-bubble');
-  const closeBtn = document.getElementById('mascot-close');
-  const figure = mascot.querySelector('.mascot-figure');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const walker = document.getElementById('walker');
+  const bubble = document.getElementById('walker-bubble');
   const lines = [
     "Hi — I'm David's <b>AI twin</b>. Ask the real one about plasmonics.",
     "Psst… the <b>HELIX</b> tab needs a password. 🔐",
     "Fun fact: I analyse <b>11,160</b> crystal images a night.",
-    "Grab his <b>CV</b> up top — it's worth a read.",
+    "Grab his <b>CV</b> up top — it's worth a read. 📄",
     "Gold nanoparticles are basically tiny <b>antennas</b>. Neat, right?",
-    "Built in Austria, tuned in Zürich, running in <b>New York</b>."
+    "Built in Austria, tuned in Zürich, running in <b>New York</b>. 🗽",
+    "Still walking… unlike his overnight batch jobs. 😴",
+    "I'd wave, but I'm busy segmenting crystals."
   ];
-  let i = 0, dismissed = false;
+  const complaints = [
+    "Ouch! Hey! 😵",
+    "Rude! I'm walking here! 🌀",
+    "I'll allow it… once. 😤",
+    "Down but not defeated! 💫"
+  ];
+
+  // position state (px from left edge of the character)
+  let x = 40;
+  let dir = 1;                     // 1 = right, -1 = left
+  let speed = 0.55;                // px per frame
+  let fallen = false;
+  let lastT = 0;
+  const bottomWidth = () => window.innerWidth - 80;
+
+  function face(d) { walker.style.setProperty('--face', d); }
+
+  function frame(now) {
+    if (!lastT) lastT = now;
+    const dt = Math.min(now - lastT, 40); lastT = now;
+    if (!fallen) {
+      x += dir * speed * (dt / 16.7);
+      if (x > bottomWidth()) { x = bottomWidth(); dir = -1; face(-1); }
+      else if (x < 8) { x = 8; dir = 1; face(1); }
+      walker.style.setProperty('--x', x + 'px');
+    }
+    requestAnimationFrame(frame);
+  }
+
+  let bi = -1;
   function say(txt) {
     bubble.innerHTML = txt;
+    // anchor bubble side depending on facing so it doesn't run off screen
+    bubble.classList.toggle('left-anchor', x > window.innerWidth * 0.6);
     bubble.classList.add('show');
     clearTimeout(bubble._t);
-    bubble._t = setTimeout(() => bubble.classList.remove('show'), 5200);
+    bubble._t = setTimeout(() => bubble.classList.remove('show'), 4800);
   }
-  function appear() {
-    if (dismissed) return;
-    mascot.classList.add('show');
-    setTimeout(() => say(lines[0]), 700);
+  function chatter() {
+    if (!fallen) { bi = (bi + 1) % lines.length; say(lines[bi]); }
+    scheduleChatter();
   }
-  figure.addEventListener('click', e => {
-    if (e.target === closeBtn) return;
-    i = (i + 1) % lines.length;
-    say(lines[i]);
+  function scheduleChatter() {
+    const wait = 10000 + Math.random() * 5000; // 10–15s
+    clearTimeout(chatter._t);
+    chatter._t = setTimeout(chatter, wait);
+  }
+
+  // click → fall, complain, get up after 3s
+  walker.addEventListener('click', () => {
+    if (fallen) return;
+    fallen = true;
+    walker.classList.remove('walking');
+    walker.classList.add('fallen');
+    say(complaints[Math.floor(Math.random() * complaints.length)]);
+    setTimeout(() => {
+      walker.classList.remove('fallen');
+      walker.classList.add('walking');
+      fallen = false;
+      say("Okay, back up! 💪");
+    }, 3000);
   });
-  closeBtn.addEventListener('click', () => {
-    dismissed = true;
-    mascot.classList.remove('show');
-  });
-  setTimeout(appear, 4200); // after intro + a beat
+
+  function start() {
+    walker.classList.add('show');
+    if (reduced) {                 // static, no walking, but still chatty on click
+      face(1);
+      walker.style.setProperty('--x', '40px');
+      setTimeout(() => say(lines[0]), 600);
+      return;
+    }
+    walker.classList.add('walking');
+    face(1);
+    requestAnimationFrame(frame);
+    setTimeout(() => say(lines[0]), 900);
+    scheduleChatter();
+  }
+  setTimeout(start, 4200); // after intro settles
 })();
 
 /* ═══ TICKER — duplicate content for seamless loop ═══ */
