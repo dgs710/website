@@ -818,6 +818,7 @@ footer p b { color: var(--accent); font-weight: 400; }
   background: #F5B800; box-shadow: 0 0 10px rgba(245,184,0,0.6);
   animation: pulse 2s infinite;
 }
+.dot-live.on { background: var(--accent); box-shadow: 0 0 10px var(--glow); }
 .helix-launch-desc { font-size: 0.84rem; font-weight: 300; line-height: 1.85; color: var(--ink-muted); margin-bottom: 1.3rem; }
 .helix-note { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.08em; color: var(--ink-muted); margin-top: 0.9rem; }
 
@@ -905,6 +906,62 @@ footer p b { color: var(--accent); font-weight: 400; }
 @media (max-width: 720px) {
   .helix-steps { grid-template-columns: 1fr; }
   .hf-arrow { transform: rotate(90deg); }
+}
+
+/* ─── OWL-specific ─── */
+.owl-emoji { font-size: 0.9em; display: inline-block; }
+.owl-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.owl-mode {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); padding: 1.3rem 1.4rem;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.owl-mode:hover { border-color: var(--line-acc); transform: translateY(-3px); box-shadow: 0 16px 44px rgba(0,0,0,0.4); }
+.owl-mode-tag {
+  display: inline-block; font-family: var(--font-mono);
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.3rem 0.7rem; border: 1px solid var(--line); border-radius: 99px;
+  color: var(--ink-mid); margin-bottom: 0.8rem;
+}
+.owl-mode-tag.g { border-color: var(--line-acc); color: var(--accent); background: rgba(52,211,153,0.06); }
+.owl-mode p { font-size: 0.82rem; font-weight: 300; line-height: 1.8; color: var(--ink-muted); }
+.owl-mode p b { color: var(--ink-mid); font-weight: 500; }
+.owl-mode code, .owl-flow code, .owl-guide code, .owl-honest code, .helix-desc code, .ph-desc code, .helix-launch-desc code {
+  font-family: var(--font-mono); font-size: 0.86em;
+  background: rgba(52,211,153,0.08); padding: 0.05em 0.35em; border-radius: 4px;
+  color: var(--accent-2);
+}
+.owl-flow { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+.owl-step {
+  display: flex; gap: 0.9rem; align-items: flex-start;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); padding: 1.1rem 1.2rem;
+}
+.owl-step > b {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head); font-weight: 700; font-size: 0.9rem;
+  color: var(--accent); border: 1px solid var(--line-acc);
+  background: rgba(52,211,153,0.06);
+}
+.owl-step h4 { font-family: var(--font-head); font-size: 0.92rem; font-weight: 600; margin-bottom: 0.25rem; }
+.owl-step p { font-size: 0.76rem; font-weight: 300; line-height: 1.65; color: var(--ink-muted); }
+.owl-guide {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); padding: 1.2rem 1.4rem 1.2rem 2.6rem;
+  display: flex; flex-direction: column; gap: 0.6rem;
+}
+.owl-guide li { font-size: 0.82rem; font-weight: 300; line-height: 1.7; color: var(--ink-muted); }
+.owl-guide li::marker { color: var(--accent); font-family: var(--font-mono); }
+.owl-honest {
+  border: 1px solid var(--line); border-left: 2px solid var(--accent);
+  border-radius: var(--radius); background: rgba(52,211,153,0.04);
+  padding: 1.1rem 1.3rem; font-size: 0.82rem; font-weight: 300;
+  line-height: 1.8; color: var(--ink-muted);
+}
+.owl-honest b { color: var(--ink-mid); font-weight: 500; }
+@media (max-width: 720px) {
+  .owl-modes, .owl-flow { grid-template-columns: 1fr; }
 }
 
 /* ─── Walking AI mascot ─── */
@@ -1087,6 +1144,7 @@ footer p b { color: var(--accent); font-weight: 400; }
       <li><a href="#" data-panel="engagement">Engagement</a></li>
       <li><a href="#" data-panel="affiliations">Affiliations</a></li>
       <li><a href="#" class="tab-helix" data-panel="helix">HELIX <span class="helix-diamond">◆</span></a></li>
+      <li><a href="#" class="tab-helix" data-panel="owl">OWL <span class="owl-emoji">🦉</span></a></li>
     </ul>
     <div class="ribbon-right">
       <a href="mailto:dgs2153@columbia.edu" class="pill">
@@ -1708,6 +1766,134 @@ footer p b { color: var(--accent); font-weight: 400; }
     </div>
   </div>
 
+  <!-- ═══════════ OWL (password-gated) ═══════════ -->
+  <div class="panel" id="panel-owl">
+    <div class="wrap">
+
+      <!-- LOCKED VIEW -->
+      <div id="owl-lock" class="helix-lock">
+        <div class="helix-lock-card">
+          <div class="helix-badge">🦉</div>
+          <p class="ph-label" style="justify-content:center;">Restricted Tool</p>
+          <h2 class="helix-title">OWL</h2>
+          <p class="helix-sub">Overleaf · Word · LaTeX</p>
+          <p class="helix-desc">
+            Turn an Overleaf paper (LaTeX + <code style="color:var(--accent-2);">references.bib</code>
+            + figures) into an editable Word document — one upload, a <code style="color:var(--accent-2);">.docx</code>
+            back. Access is password protected.
+          </p>
+          <form id="owl-form" autocomplete="off">
+            <div class="helix-input-row">
+              <svg class="lock-ico" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+              <input type="password" id="owl-pw" placeholder="Enter access password" aria-label="OWL password" />
+              <button type="submit" class="pill solid">Unlock</button>
+            </div>
+            <p class="helix-err" id="owl-err">Incorrect password. Try again.</p>
+          </form>
+        </div>
+      </div>
+
+      <!-- UNLOCKED VIEW -->
+      <div id="owl-app" class="helix-app" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="ph-label">Tool · Access Granted</p>
+            <h2>OWL — <em>Overleaf → Word</em></h2>
+          </div>
+          <p class="ph-desc">
+            Written your paper in Overleaf but your advisor needs Word? Upload the
+            LaTeX sources, pick a mode, download an editable <code style="color:var(--accent-2);">.docx</code>
+            — fonts, figures, equations and ACS citations carried across.
+          </p>
+        </div>
+
+        <div class="helix-doc">
+
+          <!-- Launch -->
+          <div class="helix-launch reveal">
+            <div class="helix-status" id="owl-status">
+              <span class="dot-live on"></span> Live — opens in a new tab
+            </div>
+            <p class="helix-launch-desc">
+              The OWL converter runs as its own small web app. Click below to open it,
+              enter the access password, then upload your Overleaf source
+              <code style="color:var(--accent-2);">.zip</code>, pick a mode, and download
+              the Word document.
+            </p>
+            <a href="https://owl-app.streamlit.app" target="_blank" rel="noopener" id="owl-launch-btn" class="pill solid">
+              Launch OWL →
+            </a>
+          </div>
+
+          <!-- Two modes -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">Two modes</span>
+            <h3>Pick what the reader needs</h3>
+            <p>Both take the same upload — your <code style="color:var(--accent-2);">.tex</code>, <code style="color:var(--accent-2);">references.bib</code> and figures (or the whole Overleaf source <code style="color:var(--accent-2);">.zip</code>).</p>
+          </div>
+          <div class="owl-modes">
+            <div class="owl-mode reveal">
+              <span class="owl-mode-tag">Editable Word</span>
+              <p>Times New Roman, justified, title page, running header, Arabic body /
+                 Roman appendix numbering, <b>real Word equations</b>, and clickable
+                 ACS citations built straight from your <code>.bib</code>. Best when the
+                 reader needs to <b>edit or comment</b>.</p>
+            </div>
+            <div class="owl-mode reveal">
+              <span class="owl-mode-tag g">Editable + live Zotero</span>
+              <p>The same document, but citations come out as Zotero RTF/ODF-Scan
+                 markers <code>{Author, Year}</code> plus a <code>{Bibliography}</code>
+                 placeholder — one scan turns them into <b>live, editable Zotero
+                 fields</b>. Best when the reader manages references in Zotero.</p>
+            </div>
+          </div>
+
+          <!-- Workflow -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">The workflow</span>
+            <h3>Four steps, a few seconds</h3>
+          </div>
+          <div class="owl-flow reveal">
+            <div class="owl-step"><b>1</b><div><h4>Download from Overleaf</h4><p>Menu → Download → <b>Source</b> (a <code>.zip</code> with your <code>.tex</code>, <code>.bib</code> and figures).</p></div></div>
+            <div class="owl-step"><b>2</b><div><h4>Upload it to OWL</h4><p>Drop the <code>.zip</code> in — OWL finds the main <code>.tex</code> and its bibliography automatically.</p></div></div>
+            <div class="owl-step"><b>3</b><div><h4>Pick a mode</h4><p>Editable Word, or Editable + live Zotero citations.</p></div></div>
+            <div class="owl-step"><b>4</b><div><h4>Download the Word doc</h4><p>Hand <code>main.docx</code> to your advisor. Done.</p></div></div>
+          </div>
+
+          <!-- Zotero guide -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">Zotero mode</span>
+            <h3>Make citations live — one-time scan</h3>
+            <p>Only needed if you chose the Zotero mode and want editable Zotero fields.</p>
+          </div>
+          <ol class="owl-guide reveal">
+            <li>Import your <code>.bib</code> into Zotero (File → Import) — the same file Overleaf syncs.</li>
+            <li>Open the downloaded <code>.docx</code> in LibreOffice and Save As <code>.odt</code>.</li>
+            <li>Zotero → Tools → RTF/ODF Scan → “ODF (to ODF)”, pick the <code>.odt</code>.</li>
+            <li>Confirm each source once in the dialog (resolves any ambiguous author + year).</li>
+            <li>Open the result — every citation is a live Zotero field and the bibliography is generated at the <code>{Bibliography}</code> marker.</li>
+          </ol>
+
+          <!-- Honest note -->
+          <div class="owl-honest reveal">
+            <b>Editable is close, not pixel-identical.</b> Word re-wraps text with its
+            own line-breaking engine while LaTeX uses Knuth–Plass, the “Times” fonts
+            differ slightly, and Word lacks LaTeX hyphenation — so line and page breaks
+            drift. That's a property of the two systems, not a setting. If a reader needs
+            it to <b>look</b> exactly like the PDF, just hand them the compiled Overleaf
+            PDF; OWL is the <b>editable</b> hand-off.
+          </div>
+
+          <p class="helix-footline reveal">
+            Built on pandoc + python-docx &nbsp;·&nbsp; no LaTeX install needed &nbsp;·&nbsp; runs free on Streamlit Cloud / Hugging Face Spaces
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </main>
 
 <footer>
@@ -1805,29 +1991,39 @@ document.getElementById('flip-card').addEventListener('click', function () {
   this.classList.toggle('flipped');
 });
 
-/* ═══ HELIX PASSWORD GATE ═══ */
+/* ═══ TOOL PASSWORD GATES (HELIX, OWL) ═══ */
 (function () {
-  const PASSWORD = 'xX2357Xx';   // shared access password
-  const form = document.getElementById('helix-form');
-  const pw   = document.getElementById('helix-pw');
-  const err  = document.getElementById('helix-err');
-  const lock = document.getElementById('helix-lock');
-  const app  = document.getElementById('helix-app');
-  function unlock() { lock.hidden = true; app.hidden = false; }
-  // stay unlocked for the rest of the visit
-  if (sessionStorage && sessionStorage.getItem('helix_ok') === '1') unlock();
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    if (pw.value === PASSWORD) {
-      try { sessionStorage.setItem('helix_ok', '1'); } catch (_) {}
-      unlock();
-    } else {
-      err.classList.add('show');
-      pw.value = '';
-      pw.focus();
-      setTimeout(() => err.classList.remove('show'), 2600);
-    }
-  });
+  const PASSWORD = 'xX2357Xx';   // shared access password for gated tools
+  function gate(key) {
+    const form = document.getElementById(key + '-form');
+    const pw   = document.getElementById(key + '-pw');
+    const err  = document.getElementById(key + '-err');
+    const lock = document.getElementById(key + '-lock');
+    const app  = document.getElementById(key + '-app');
+    if (!form) return;
+    function unlock() { lock.hidden = true; app.hidden = false; }
+    // one unlock opens every gated tool for the rest of the visit
+    if (sessionStorage && sessionStorage.getItem('tools_ok') === '1') unlock();
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      if (pw.value === PASSWORD) {
+        try { sessionStorage.setItem('tools_ok', '1'); } catch (_) {}
+        // unlock all gated tools at once
+        ['helix', 'owl'].forEach(k => {
+          const l = document.getElementById(k + '-lock');
+          const a = document.getElementById(k + '-app');
+          if (l && a) { l.hidden = true; a.hidden = false; }
+        });
+      } else {
+        err.classList.add('show');
+        pw.value = '';
+        pw.focus();
+        setTimeout(() => err.classList.remove('show'), 2600);
+      }
+    });
+  }
+  gate('helix');
+  gate('owl');
 })();
 
 /* ═══ WALKING AI MASCOT ═══ */
