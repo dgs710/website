@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- dgschauer.com — website v7 · HELIX Results Explorer button live + OWL converter live -->
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -1660,17 +1661,24 @@ footer p b { color: var(--accent); font-weight: 400; }
           <!-- Launch status -->
           <div class="helix-launch reveal">
             <div class="helix-status" id="helix-status">
-              <span class="dot-live"></span> Live tool not yet connected — overview below
+              <span class="dot-live on"></span> Results Explorer is live — full GPU analysis coming soon
             </div>
             <p class="helix-launch-desc">
-              The interactive HELIX application will open here once it is deployed. For now,
-              this page walks through exactly what the pipeline does, end to end. The engine
-              performs GPU segmentation (FastSAM), Boltzmann melting-curve fits, and
-              denaturant-sensitivity analysis on plate-scanned microscope images.
+              <b style="color:var(--ink-mid);">Explore results</b> opens the interactive HELIX
+              results browser: click the plate, open melting curves, Boltzmann&nbsp;T<sub>m</sub> fits
+              and crystal-size distributions, compare wells and download CSVs — or upload your own
+              run's <code style="color:var(--accent-2);">results/</code> folder. It needs no GPU.
+              <br><b style="color:var(--ink-mid);">Launch HELIX</b> — the full GPU segmentation run —
+              stays local for now; the walkthrough below shows exactly what it does.
             </p>
-            <a href="#" id="helix-launch-btn" class="pill solid" style="pointer-events:none; opacity:0.45;">
-              Launch HELIX →
-            </a>
+            <div class="helix-btn-row" style="display:flex; gap:0.7rem; flex-wrap:wrap; align-items:center;">
+              <a href="https://helix-app.streamlit.app" target="_blank" rel="noopener" id="helix-explore-btn" class="pill solid">
+                Explore results →
+              </a>
+              <a href="#" id="helix-launch-btn" class="pill" style="pointer-events:none; opacity:0.45;">
+                Launch HELIX (GPU) — coming soon
+              </a>
+            </div>
           </div>
 
           <!-- Hero master scheme -->
@@ -1802,8 +1810,9 @@ footer p b { color: var(--accent); font-weight: 400; }
           </div>
           <p class="ph-desc">
             Written your paper in Overleaf but your advisor needs Word? Upload the
-            LaTeX sources, pick a mode, download an editable <code style="color:var(--accent-2);">.docx</code>
-            — fonts, figures, equations and ACS citations carried across.
+            LaTeX sources, download an editable <code style="color:var(--accent-2);">.docx</code>
+            — fonts, figures, equations and ACS citations carried across, bundled
+            with your PDF and sources.
           </p>
         </div>
 
@@ -1816,63 +1825,49 @@ footer p b { color: var(--accent); font-weight: 400; }
             </div>
             <p class="helix-launch-desc">
               The OWL converter runs as its own small web app. Click below to open it,
-              enter the access password, then upload your Overleaf source
-              <code style="color:var(--accent-2);">.zip</code>, pick a mode, and download
-              the Word document.
+              enter the access password, upload your Overleaf source
+              <code style="color:var(--accent-2);">.zip</code> (and optionally the compiled
+              PDF), and download a bundle with the Word file, PDF, <code style="color:var(--accent-2);">.bib</code>
+              and all figures.
             </p>
             <a href="https://owl-app.streamlit.app" target="_blank" rel="noopener" id="owl-launch-btn" class="pill solid">
               Launch OWL →
             </a>
           </div>
 
-          <!-- Two modes -->
+          <!-- What you get -->
           <div class="helix-phase reveal">
-            <span class="hp-num">Two modes</span>
-            <h3>Pick what the reader needs</h3>
-            <p>Both take the same upload — your <code style="color:var(--accent-2);">.tex</code>, <code style="color:var(--accent-2);">references.bib</code> and figures (or the whole Overleaf source <code style="color:var(--accent-2);">.zip</code>).</p>
+            <span class="hp-num">What you get</span>
+            <h3>An editable Word document — plus your sources</h3>
+            <p>One upload in, one <code style="color:var(--accent-2);">.zip</code> out.</p>
           </div>
           <div class="owl-modes">
             <div class="owl-mode reveal">
-              <span class="owl-mode-tag">Editable Word</span>
+              <span class="owl-mode-tag g">Editable Word (.docx)</span>
               <p>Times New Roman, justified, title page, running header, Arabic body /
                  Roman appendix numbering, <b>real Word equations</b>, and clickable
-                 ACS citations built straight from your <code>.bib</code>. Best when the
-                 reader needs to <b>edit or comment</b>.</p>
+                 ACS citations built straight from your <code>.bib</code> — ready for your
+                 advisor to <b>edit or comment</b> on.</p>
             </div>
             <div class="owl-mode reveal">
-              <span class="owl-mode-tag g">Editable + live Zotero</span>
-              <p>The same document, but citations come out as Zotero RTF/ODF-Scan
-                 markers <code>{Author, Year}</code> plus a <code>{Bibliography}</code>
-                 placeholder — one scan turns them into <b>live, editable Zotero
-                 fields</b>. Best when the reader manages references in Zotero.</p>
+              <span class="owl-mode-tag">Everything, bundled</span>
+              <p>The download is a single <code>.zip</code> holding the <b>Word file</b>,
+                 your <b>compiled PDF</b> (if you upload it), the <b>references.bib</b>, and
+                 <b>all figures</b> — so the whole paper travels together in one place.</p>
             </div>
           </div>
 
           <!-- Workflow -->
           <div class="helix-phase reveal">
             <span class="hp-num">The workflow</span>
-            <h3>Four steps, a few seconds</h3>
+            <h3>Three steps, a few seconds</h3>
           </div>
           <div class="owl-flow reveal">
-            <div class="owl-step"><b>1</b><div><h4>Download from Overleaf</h4><p>Menu → Download → <b>Source</b> (a <code>.zip</code> with your <code>.tex</code>, <code>.bib</code> and figures).</p></div></div>
+            <div class="owl-step"><b>1</b><div><h4>Download from Overleaf</h4><p>Menu → Download → <b>Source</b> (a <code>.zip</code> with your <code>.tex</code>, <code>.bib</code> and figures). Grab the <b>PDF</b> too if you want it in the bundle.</p></div></div>
             <div class="owl-step"><b>2</b><div><h4>Upload it to OWL</h4><p>Drop the <code>.zip</code> in — OWL finds the main <code>.tex</code> and its bibliography automatically.</p></div></div>
-            <div class="owl-step"><b>3</b><div><h4>Pick a mode</h4><p>Editable Word, or Editable + live Zotero citations.</p></div></div>
-            <div class="owl-step"><b>4</b><div><h4>Download the Word doc</h4><p>Hand <code>main.docx</code> to your advisor. Done.</p></div></div>
+            <div class="owl-step"><b>3</b><div><h4>Download the bundle</h4><p>Get back a <code>.zip</code> with the Word file, PDF, <code>.bib</code> and figures. Hand it to your advisor. Done.</p></div></div>
+            <div class="owl-step"><b>+</b><div><h4>Citations to edit?</h4><p>Easiest is to have your advisor flag adds / removes in Word comments — you handle them in Overleaf and re-run OWL.</p></div></div>
           </div>
-
-          <!-- Zotero guide -->
-          <div class="helix-phase reveal">
-            <span class="hp-num">Zotero mode</span>
-            <h3>Make citations live — one-time scan</h3>
-            <p>Only needed if you chose the Zotero mode and want editable Zotero fields.</p>
-          </div>
-          <ol class="owl-guide reveal">
-            <li>Import your <code>.bib</code> into Zotero (File → Import) — the same file Overleaf syncs.</li>
-            <li>Open the downloaded <code>.docx</code> in LibreOffice and Save As <code>.odt</code>.</li>
-            <li>Zotero → Tools → RTF/ODF Scan → “ODF (to ODF)”, pick the <code>.odt</code>.</li>
-            <li>Confirm each source once in the dialog (resolves any ambiguous author + year).</li>
-            <li>Open the result — every citation is a live Zotero field and the bibliography is generated at the <code>{Bibliography}</code> marker.</li>
-          </ol>
 
           <!-- Honest note -->
           <div class="owl-honest reveal">
