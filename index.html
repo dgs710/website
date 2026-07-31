@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- dgschauer.com — website v7 · HELIX Results Explorer button live + OWL converter live -->
+<!-- dgschauer.com — website v8 · HELIX + OWL + SCAFFOLD (SAXS/ScatterSim) tools live -->
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -1146,6 +1146,7 @@ footer p b { color: var(--accent); font-weight: 400; }
       <li><a href="#" data-panel="affiliations">Affiliations</a></li>
       <li><a href="#" class="tab-helix" data-panel="helix">HELIX <span class="helix-diamond">◆</span></a></li>
       <li><a href="#" class="tab-helix" data-panel="owl">OWL <span class="owl-emoji">🦉</span></a></li>
+      <li><a href="#" class="tab-helix" data-panel="scaffold">SCAFFOLD <span class="helix-diamond">◈</span></a></li>
     </ul>
     <div class="ribbon-right">
       <a href="mailto:dgs2153@columbia.edu" class="pill">
@@ -1889,6 +1890,126 @@ footer p b { color: var(--accent); font-weight: 400; }
     </div>
   </div>
 
+  <!-- ═══════════ SCAFFOLD (password-gated) ═══════════ -->
+  <div class="panel" id="panel-scaffold">
+    <div class="wrap">
+
+      <!-- LOCKED VIEW -->
+      <div id="scaffold-lock" class="helix-lock">
+        <div class="helix-lock-card">
+          <div class="helix-badge">◈</div>
+          <p class="ph-label" style="justify-content:center;">Restricted Tool</p>
+          <h2 class="helix-title">SCAFFOLD</h2>
+          <p class="helix-sub">SAXS · Structure Factor · ScatterSim</p>
+          <p class="helix-desc">
+            Turn reduced 1-D SAXS curves into quantitative structure for
+            DNA-origami superlattices — form-factor fit, structure factor
+            <code style="color:var(--accent-2);">S(q)</code>, cubic indexing and
+            ScatterSim crystal fits. Access is password protected.
+          </p>
+          <form id="scaffold-form" autocomplete="off">
+            <div class="helix-input-row">
+              <svg class="lock-ico" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+              <input type="password" id="scaffold-pw" placeholder="Enter access password" aria-label="SCAFFOLD password" />
+              <button type="submit" class="pill solid">Unlock</button>
+            </div>
+            <p class="helix-err" id="scaffold-err">Incorrect password. Try again.</p>
+          </form>
+        </div>
+      </div>
+
+      <!-- UNLOCKED VIEW -->
+      <div id="scaffold-app" class="helix-app" hidden>
+        <div class="panel-header">
+          <div>
+            <p class="ph-label">Tool · Access Granted</p>
+            <h2>SCAFFOLD — <em>ScatterSim analysis for origami lattices</em></h2>
+          </div>
+          <p class="ph-desc">
+            Upload your reduced 1-D SAXS curves (CMS
+            <code style="color:var(--accent-2);">Cir_Avg…csv</code> or ESRF
+            <code style="color:var(--accent-2);">.dat</code>) and get, per curve:
+            the form-factor fit, the structure factor
+            <code style="color:var(--accent-2);">S(q) = I/P<sub>fit</sub></code>,
+            peak detection, cubic (SC/BCC/FCC) indexing with (hkl) labels, and
+            full-resolution ScatterSim crystal fits.
+          </p>
+        </div>
+
+        <div class="helix-doc">
+
+          <!-- Launch -->
+          <div class="helix-launch reveal">
+            <div class="helix-status" id="scaffold-status">
+              <span class="dot-live on"></span> Live — opens in a new tab
+            </div>
+            <p class="helix-launch-desc">
+              SCAFFOLD runs as its own small web app. Click below to open it, pick
+              your geometry (octahedron / cube / tetrahedron) and fill state,
+              upload one or many curves, and step through Overview → Data →
+              Measurement → Analysis → Modelling. Downloads: publication-ready
+              <code style="color:var(--accent-2);">S(q)</code> figures (PNG/PDF/SVG),
+              peak-&gt;(hkl) mapping tables, and a batch results spreadsheet.
+            </p>
+            <a href="https://scaffold-app.streamlit.app" target="_blank" rel="noopener" id="scaffold-launch-btn" class="pill solid">
+              Launch SCAFFOLD →
+            </a>
+          </div>
+
+          <!-- What you get -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">What you get</span>
+            <h3>From a raw curve to an indexed structure factor</h3>
+            <p>The physics is the lab's <b>ScatterSim</b> library (K. Yager, CFN) — bundled and untouched.</p>
+          </div>
+          <div class="owl-modes">
+            <div class="owl-mode reveal">
+              <span class="owl-mode-tag g">Form factor &amp; S(q)</span>
+              <p>Fit <code>scale·P(q)</code> to the data and divide it out —
+                 <code>S(q) = I / P<sub>fit</sub></code> — with the Bragg peaks
+                 rising above the fit. AuNP sphere for filled sites, origami
+                 wireframe for empty. Optional buffer-blank / power-law background.</p>
+            </div>
+            <div class="owl-mode reveal">
+              <span class="owl-mode-tag">Indexing &amp; fits</span>
+              <p>Automatic <b>SC / BCC / FCC</b> indexing with per-peak <b>(hkl)</b>
+                 labels and a lattice constant <code>a</code>, plus a
+                 full-resolution <b>ScatterSim crystal fit</b>. Drop many files in
+                 for <b>batch</b> mode with a master spreadsheet.</p>
+            </div>
+          </div>
+
+          <!-- Workflow -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">The workflow</span>
+            <h3>Five steps, one browser tab</h3>
+          </div>
+          <div class="owl-flow reveal">
+            <div class="owl-step"><b>1</b><div><h4>Pick your sample</h4><p>Choose the origami geometry and fill state (empty / half / fully-filled), and the gold size for filled systems.</p></div></div>
+            <div class="owl-step"><b>2</b><div><h4>Upload your curves</h4><p>One or many reduced 1-D curves — <code>Cir_Avg…csv</code> or ESRF <code>.dat</code>. The loader auto-detects the format.</p></div></div>
+            <div class="owl-step"><b>3</b><div><h4>Fit &amp; index</h4><p>The form factor is fit and divided out, peaks detected, and the cubic lattice indexed with (hkl) labels and a lattice constant.</p></div></div>
+            <div class="owl-step"><b>4</b><div><h4>Download</h4><p>Publication figures (PNG/PDF/SVG), the peak→(hkl) mapping and a text summary — or a batch results <code>.zip</code>.</p></div></div>
+          </div>
+
+          <!-- Honest note -->
+          <div class="owl-honest reveal">
+            <b>The fit is a refinement, not a one-click truth.</b> A peak set with
+            simple integer ratios can be consistent with more than one cubic cell
+            from positions alone, so SCAFFOLD <b>ranks candidates and flags the
+            ambiguity</b> rather than forcing one answer. Object shape, SLD contrast
+            and the fit window are all yours to set — you stay in control.
+          </div>
+
+          <p class="helix-footline reveal">
+            Built on the lab's ScatterSim (K. Yager, CFN) + scipy &nbsp;·&nbsp; no scattering physics reimplemented &nbsp;·&nbsp; runs free on Streamlit Cloud
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </main>
 
 <footer>
@@ -2004,7 +2125,7 @@ document.getElementById('flip-card').addEventListener('click', function () {
       if (pw.value === PASSWORD) {
         try { sessionStorage.setItem('tools_ok', '1'); } catch (_) {}
         // unlock all gated tools at once
-        ['helix', 'owl'].forEach(k => {
+        ['helix', 'owl', 'scaffold'].forEach(k => {
           const l = document.getElementById(k + '-lock');
           const a = document.getElementById(k + '-app');
           if (l && a) { l.hidden = true; a.hidden = false; }
@@ -2019,6 +2140,7 @@ document.getElementById('flip-card').addEventListener('click', function () {
   }
   gate('helix');
   gate('owl');
+  gate('scaffold');
 })();
 
 /* ═══ WALKING AI MASCOT ═══ */
