@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- dgschauer.com — website v8 · HELIX + OWL + SCAFFOLD (SAXS/ScatterSim) tools live -->
+<!-- dgschauer.com — website v9 · HELIX + OWL + SCAFFOLD tools live (no password gate) · 3D tool animations -->
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -506,6 +506,19 @@ h1.name .grad {
 .ph-label::before {
   content: ''; width: 26px; height: 1px;
   background: linear-gradient(90deg, var(--accent), transparent);
+}
+/* ─── 3D tool animation (next to each tool title) ─── */
+.ph-head { display: flex; align-items: center; gap: 1.4rem; }
+.tool3d {
+  flex: 0 0 auto; width: 132px; height: 132px; position: relative;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 42%, rgba(52,211,153,0.10), rgba(6,9,11,0) 70%);
+  box-shadow: inset 0 0 0 1px var(--line), 0 0 34px rgba(52,211,153,0.06);
+}
+.tool3d canvas { width: 100%; height: 100%; display: block; }
+@media (max-width: 820px) {
+  .ph-head { gap: 1rem; }
+  .tool3d { width: 96px; height: 96px; }
 }
 .panel-header h2 {
   font-family: var(--font-head);
@@ -1616,39 +1629,18 @@ footer p b { color: var(--accent); font-weight: 400; }
     </div>
   </div>
 
-  <!-- ═══════════ HELIX (password-gated) ═══════════ -->
+  <!-- ═══════════ HELIX (live) ═══════════ -->
   <div class="panel" id="panel-helix">
     <div class="wrap">
 
-      <!-- LOCKED VIEW -->
-      <div id="helix-lock" class="helix-lock">
-        <div class="helix-lock-card">
-          <div class="helix-badge">◆</div>
-          <p class="ph-label" style="justify-content:center;">Restricted Tool</p>
-          <h2 class="helix-title">HELIX</h2>
-          <p class="helix-sub">High-throughput Edge-Length &amp; Lattice Imaging eXplorer</p>
-          <p class="helix-desc">
-            Automated image-analysis suite for DNA-origami crystal melting-temperature
-            experiments — segmentation, melting curves, Boltzmann fits, and trend analysis.
-            Access is password protected.
-          </p>
-          <form id="helix-form" autocomplete="off">
-            <div class="helix-input-row">
-              <svg class="lock-ico" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-              <input type="password" id="helix-pw" placeholder="Enter access password" aria-label="HELIX password" />
-              <button type="submit" class="pill solid">Unlock</button>
-            </div>
-            <p class="helix-err" id="helix-err">Incorrect password. Try again.</p>
-          </form>
-        </div>
-      </div>
-
-      <!-- UNLOCKED VIEW -->
-      <div id="helix-app" class="helix-app" hidden>
+      <div id="helix-app" class="helix-app">
         <div class="panel-header">
-          <div>
-            <p class="ph-label">Tool · Access Granted</p>
-            <h2>HELIX <em>Image Analysis</em></h2>
+          <div class="ph-head">
+            <div>
+              <p class="ph-label">Tool · Live</p>
+              <h2>HELIX <em>Image Analysis</em></h2>
+            </div>
+            <div class="tool3d" aria-hidden="true"><canvas id="c3d-helix"></canvas></div>
           </div>
           <p class="ph-desc">
             Crystal-Tools v8 · From <b style="color:var(--ink-mid);">11,160</b> optical-microscopy
@@ -1775,39 +1767,18 @@ footer p b { color: var(--accent); font-weight: 400; }
     </div>
   </div>
 
-  <!-- ═══════════ OWL (password-gated) ═══════════ -->
+  <!-- ═══════════ OWL (live) ═══════════ -->
   <div class="panel" id="panel-owl">
     <div class="wrap">
 
-      <!-- LOCKED VIEW -->
-      <div id="owl-lock" class="helix-lock">
-        <div class="helix-lock-card">
-          <div class="helix-badge">🦉</div>
-          <p class="ph-label" style="justify-content:center;">Restricted Tool</p>
-          <h2 class="helix-title">OWL</h2>
-          <p class="helix-sub">Overleaf · Word · LaTeX</p>
-          <p class="helix-desc">
-            Turn an Overleaf paper (LaTeX + <code style="color:var(--accent-2);">references.bib</code>
-            + figures) into an editable Word document — one upload, a <code style="color:var(--accent-2);">.docx</code>
-            back. Access is password protected.
-          </p>
-          <form id="owl-form" autocomplete="off">
-            <div class="helix-input-row">
-              <svg class="lock-ico" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-              <input type="password" id="owl-pw" placeholder="Enter access password" aria-label="OWL password" />
-              <button type="submit" class="pill solid">Unlock</button>
-            </div>
-            <p class="helix-err" id="owl-err">Incorrect password. Try again.</p>
-          </form>
-        </div>
-      </div>
-
-      <!-- UNLOCKED VIEW -->
-      <div id="owl-app" class="helix-app" hidden>
+      <div id="owl-app" class="helix-app">
         <div class="panel-header">
-          <div>
-            <p class="ph-label">Tool · Access Granted</p>
-            <h2>OWL — <em>Overleaf → Word</em></h2>
+          <div class="ph-head">
+            <div>
+              <p class="ph-label">Tool · Live</p>
+              <h2>OWL — <em>Overleaf → Word</em></h2>
+            </div>
+            <div class="tool3d" aria-hidden="true"><canvas id="c3d-owl"></canvas></div>
           </div>
           <p class="ph-desc">
             Written your paper in Overleaf but your advisor needs Word? Upload the
@@ -1890,40 +1861,18 @@ footer p b { color: var(--accent); font-weight: 400; }
     </div>
   </div>
 
-  <!-- ═══════════ SCAFFOLD (password-gated) ═══════════ -->
+  <!-- ═══════════ SCAFFOLD (live) ═══════════ -->
   <div class="panel" id="panel-scaffold">
     <div class="wrap">
 
-      <!-- LOCKED VIEW -->
-      <div id="scaffold-lock" class="helix-lock">
-        <div class="helix-lock-card">
-          <div class="helix-badge">◈</div>
-          <p class="ph-label" style="justify-content:center;">Restricted Tool</p>
-          <h2 class="helix-title">SCAFFOLD</h2>
-          <p class="helix-sub">SAXS · Structure Factor · ScatterSim</p>
-          <p class="helix-desc">
-            Turn reduced 1-D SAXS curves into quantitative structure for
-            DNA-origami superlattices — form-factor fit, structure factor
-            <code style="color:var(--accent-2);">S(q)</code>, cubic indexing and
-            ScatterSim crystal fits. Access is password protected.
-          </p>
-          <form id="scaffold-form" autocomplete="off">
-            <div class="helix-input-row">
-              <svg class="lock-ico" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-              <input type="password" id="scaffold-pw" placeholder="Enter access password" aria-label="SCAFFOLD password" />
-              <button type="submit" class="pill solid">Unlock</button>
-            </div>
-            <p class="helix-err" id="scaffold-err">Incorrect password. Try again.</p>
-          </form>
-        </div>
-      </div>
-
-      <!-- UNLOCKED VIEW -->
-      <div id="scaffold-app" class="helix-app" hidden>
+      <div id="scaffold-app" class="helix-app">
         <div class="panel-header">
-          <div>
-            <p class="ph-label">Tool · Access Granted</p>
-            <h2>SCAFFOLD — <em>ScatterSim analysis for origami lattices</em></h2>
+          <div class="ph-head">
+            <div>
+              <p class="ph-label">Tool · Live</p>
+              <h2>SCAFFOLD — <em>ScatterSim analysis for origami lattices</em></h2>
+            </div>
+            <div class="tool3d" aria-hidden="true"><canvas id="c3d-scaffold"></canvas></div>
           </div>
           <p class="ph-desc">
             Upload your reduced 1-D SAXS curves (CMS
@@ -2107,41 +2056,7 @@ document.getElementById('flip-card').addEventListener('click', function () {
   this.classList.toggle('flipped');
 });
 
-/* ═══ TOOL PASSWORD GATES (HELIX, OWL) ═══ */
-(function () {
-  const PASSWORD = 'xX2357Xx';   // shared access password for gated tools
-  function gate(key) {
-    const form = document.getElementById(key + '-form');
-    const pw   = document.getElementById(key + '-pw');
-    const err  = document.getElementById(key + '-err');
-    const lock = document.getElementById(key + '-lock');
-    const app  = document.getElementById(key + '-app');
-    if (!form) return;
-    function unlock() { lock.hidden = true; app.hidden = false; }
-    // one unlock opens every gated tool for the rest of the visit
-    if (sessionStorage && sessionStorage.getItem('tools_ok') === '1') unlock();
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      if (pw.value === PASSWORD) {
-        try { sessionStorage.setItem('tools_ok', '1'); } catch (_) {}
-        // unlock all gated tools at once
-        ['helix', 'owl', 'scaffold'].forEach(k => {
-          const l = document.getElementById(k + '-lock');
-          const a = document.getElementById(k + '-app');
-          if (l && a) { l.hidden = true; a.hidden = false; }
-        });
-      } else {
-        err.classList.add('show');
-        pw.value = '';
-        pw.focus();
-        setTimeout(() => err.classList.remove('show'), 2600);
-      }
-    });
-  }
-  gate('helix');
-  gate('owl');
-  gate('scaffold');
-})();
+/* Tool tabs are open (no password gate). */
 
 /* ═══ WALKING AI MASCOT ═══ */
 (function () {
@@ -2150,7 +2065,7 @@ document.getElementById('flip-card').addEventListener('click', function () {
   const bubble = document.getElementById('walker-bubble');
   const lines = [
     "Hi — I'm David's <b>AI twin</b>. Ask the real one about plasmonics.",
-    "Psst… the <b>HELIX</b> tab needs a password. 🔐",
+    "The <b>HELIX</b>, <b>OWL</b> and <b>SCAFFOLD</b> tabs run live in your browser. 🔬",
     "Fun fact: I analyse <b>11,160</b> crystal images a night.",
     "Grab his <b>CV</b> up top — it's worth a read. 📄",
     "Gold nanoparticles are basically tiny <b>antennas</b>. Neat, right?",
@@ -2335,6 +2250,160 @@ document.getElementById('flip-card').addEventListener('click', function () {
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) cancelAnimationFrame(raf);
     else if (!reduced) step();
+  });
+})();
+</script>
+
+<!-- ═══ 3D TOOL ANIMATIONS (three.js) ═══ -->
+<script src="vendor/three.min.js"></script>
+<script>
+(function () {
+  if (!window.THREE) return;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const EM = 0x34D399, EM2 = 0x6EE7B7, RUNG = 0x8fa39d;
+  const up = new THREE.Vector3(0, 1, 0);
+
+  function cyl(p1, p2, r, mat) {
+    const dir = new THREE.Vector3().subVectors(p2, p1);
+    const len = dir.length();
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 10), mat);
+    m.position.copy(p1).add(p2).multiplyScalar(0.5);
+    m.quaternion.setFromUnitVectors(up, dir.clone().normalize());
+    return m;
+  }
+
+  // ---- build one renderer/scene for a canvas ----
+  function make(id, camZ, build) {
+    const canvas = document.getElementById(id);
+    if (!canvas) return null;
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+    renderer.setSize(300, 300, false);
+    const scene = new THREE.Scene();
+    const cam = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+    cam.position.set(0, 0, camZ);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.62));
+    const key = new THREE.DirectionalLight(0xffffff, 0.9); key.position.set(2, 3, 4); scene.add(key);
+    const rim = new THREE.PointLight(EM2, 0.5); rim.position.set(-3, -1, 2); scene.add(rim);
+    const obj = build(scene);
+    return { renderer, scene, cam, obj, canvas, drawn: false };
+  }
+
+  // ---- HELIX: rotating double-stranded DNA helix ----
+  function buildHelix(scene) {
+    const g = new THREE.Group();
+    const N = 26, turns = 2.35, radius = 1.02, height = 4.3;
+    const bead = new THREE.SphereGeometry(0.2, 18, 18);
+    const mA = new THREE.MeshStandardMaterial({ color: EM,  roughness: 0.34, metalness: 0.25, emissive: 0x0c3b2b, emissiveIntensity: 0.45 });
+    const mB = new THREE.MeshStandardMaterial({ color: EM2, roughness: 0.34, metalness: 0.25, emissive: 0x0c3b2b, emissiveIntensity: 0.45 });
+    const mR = new THREE.MeshStandardMaterial({ color: RUNG, roughness: 0.6, metalness: 0.1 });
+    for (let i = 0; i < N; i++) {
+      const t = i / (N - 1), ang = t * Math.PI * 2 * turns, y = -height / 2 + t * height;
+      const pA = new THREE.Vector3(Math.cos(ang) * radius, y, Math.sin(ang) * radius);
+      const pB = new THREE.Vector3(Math.cos(ang + Math.PI) * radius, y, Math.sin(ang + Math.PI) * radius);
+      const sA = new THREE.Mesh(bead, mA); sA.position.copy(pA); g.add(sA);
+      const sB = new THREE.Mesh(bead, mB); sB.position.copy(pB); g.add(sB);
+      if (i % 2 === 0) g.add(cyl(pA, pB, 0.045, mR));
+    }
+    g.rotation.x = 0.14; scene.add(g); return g;
+  }
+
+  // ---- SCAFFOLD: rotating cubic lattice ----
+  function buildLattice(scene) {
+    const g = new THREE.Group();
+    const n = 3, s = 1.02, off = (n - 1) * s / 2;
+    const node = new THREE.SphereGeometry(0.14, 16, 16);
+    const mN = new THREE.MeshStandardMaterial({ color: EM, roughness: 0.3, metalness: 0.3, emissive: 0x0c3b2b, emissiveIntensity: 0.4 });
+    const mE = new THREE.MeshStandardMaterial({ color: EM2, roughness: 0.55, metalness: 0.15, transparent: true, opacity: 0.55 });
+    const P = (i, j, k) => new THREE.Vector3(i * s - off, j * s - off, k * s - off);
+    for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) for (let k = 0; k < n; k++) {
+      const m = new THREE.Mesh(node, mN); m.position.copy(P(i, j, k)); g.add(m);
+      if (i < n - 1) g.add(cyl(P(i, j, k), P(i + 1, j, k), 0.03, mE));
+      if (j < n - 1) g.add(cyl(P(i, j, k), P(i, j + 1, k), 0.03, mE));
+      if (k < n - 1) g.add(cyl(P(i, j, k), P(i, j, k + 1), 0.03, mE));
+    }
+    scene.add(g); return g;
+  }
+
+  // ---- OWL: a little 3D owl that bobs and looks around ----
+  function buildOwl(scene) {
+    const g = new THREE.Group();
+    const body = new THREE.MeshStandardMaterial({ color: 0x2f8f6f, roughness: 0.5, metalness: 0.1 });
+    const dark = new THREE.MeshStandardMaterial({ color: 0x1c6b52, roughness: 0.6 });
+    const white = new THREE.MeshStandardMaterial({ color: 0xecfff8, roughness: 0.4 });
+    const pupil = new THREE.MeshStandardMaterial({ color: 0x06110d, roughness: 0.3 });
+    const amber = new THREE.MeshStandardMaterial({ color: 0xffb347, roughness: 0.45, emissive: 0x3a2500, emissiveIntensity: 0.3 });
+
+    const torso = new THREE.Mesh(new THREE.SphereGeometry(0.95, 32, 32), body);
+    torso.scale.set(0.92, 1.12, 0.9); g.add(torso);
+
+    // ear tufts
+    [-0.42, 0.42].forEach(x => {
+      const t = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.5, 16), body);
+      t.position.set(x, 0.95, 0); t.rotation.z = -x * 0.6; g.add(t);
+    });
+    // wings
+    [-1, 1].forEach(sx => {
+      const w = new THREE.Mesh(new THREE.SphereGeometry(0.5, 20, 20), dark);
+      w.scale.set(0.3, 0.72, 0.5); w.position.set(sx * 0.82, -0.1, 0.15);
+      w.rotation.z = sx * 0.25; g.add(w);
+    });
+    // eyes
+    const eyes = new THREE.Group();
+    [-0.34, 0.34].forEach(x => {
+      const e = new THREE.Mesh(new THREE.SphereGeometry(0.33, 22, 22), white);
+      e.position.set(x, 0.28, 0.72); e.scale.z = 0.6; eyes.add(e);
+      const p = new THREE.Mesh(new THREE.SphereGeometry(0.15, 18, 18), pupil);
+      p.position.set(x, 0.28, 0.95); eyes.add(p);
+      const hl = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), white);
+      hl.position.set(x + 0.05, 0.36, 1.06); eyes.add(hl);
+    });
+    g.add(eyes); g.userData.eyes = eyes;
+    // beak
+    const beak = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.28, 16), amber);
+    beak.position.set(0, 0.02, 0.86); beak.rotation.x = Math.PI; g.add(beak);
+    // feet
+    [-0.3, 0.3].forEach(x => {
+      const f = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.2, 12), amber);
+      f.position.set(x, -1.02, 0.35); f.rotation.x = Math.PI; g.add(f);
+    });
+    scene.add(g); return g;
+  }
+
+  const scenes = [
+    Object.assign(make('c3d-helix', 6.2, buildHelix) || {}, { kind: 'helix' }),
+    Object.assign(make('c3d-scaffold', 6.6, buildLattice) || {}, { kind: 'lattice' }),
+    Object.assign(make('c3d-owl', 4.3, buildOwl) || {}, { kind: 'owl' })
+  ].filter(s => s.renderer);
+
+  function update(s, t) {
+    if (s.kind === 'helix') { s.obj.rotation.y = t * 0.7; }
+    else if (s.kind === 'lattice') { s.obj.rotation.y = t * 0.5; s.obj.rotation.x = 0.35 + Math.sin(t * 0.3) * 0.25; }
+    else if (s.kind === 'owl') {
+      s.obj.position.y = Math.sin(t * 2.1) * 0.09;
+      s.obj.rotation.z = Math.sin(t * 1.3) * 0.05;
+      s.obj.rotation.y = Math.sin(t * 0.7) * 0.55;
+      const flap = Math.max(0, Math.sin(t * 1.1)) * 0.4;
+      s.obj.children.forEach(c => { if (c.geometry && c.material && c.material.color && c.material.color.getHex() === 0x1c6b52) { c.rotation.z = (c.position.x > 0 ? 1 : -1) * (0.25 + flap); } });
+    }
+  }
+
+  let raf;
+  function frame() {
+    const t = performance.now() / 1000;
+    for (const s of scenes) {
+      const visible = s.canvas.offsetParent !== null;
+      if (!visible) { s.drawn = false; continue; }
+      if (reduced) { if (s.drawn) continue; update(s, 0.6); s.drawn = true; }
+      else update(s, t);
+      s.renderer.render(s.scene, s.cam);
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  frame();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelAnimationFrame(raf);
+    else { raf = requestAnimationFrame(frame); }
   });
 })();
 </script>
