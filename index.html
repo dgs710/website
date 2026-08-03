@@ -1340,10 +1340,10 @@ footer p b { color: var(--accent); font-weight: 400; }
                 </div>
               </div>
               <div class="flip-face back">
-                <img src="Images/Avatar_David.jpg" alt="AI avatar of David Gabriel Schauer" />
+                <img id="twin-img" src="Images/twins/twin_mountains.jpg" alt="AI avatar of David Gabriel Schauer" />
                 <div class="face-tag">
                   <strong class="ai-label">David.ai</strong>
-                  <span>Digital Twin</span>
+                  <span id="twin-label">Digital Twin</span>
                 </div>
               </div>
             </div>
@@ -2110,10 +2110,58 @@ navToggle.addEventListener('click', () => {
   navToggle.setAttribute('aria-expanded', String(open));
 });
 
-/* ═══ FLIP CARD (tap support for touch devices) ═══ */
-document.getElementById('flip-card').addEventListener('click', function () {
-  this.classList.toggle('flipped');
-});
+/* ═══ FLIP CARD (tap support for touch devices) + RANDOM AI TWIN ═══ */
+/* Every flip reveals a different AI twin, in a shuffled order that only
+   repeats after all 10 have been shown (and never the same one twice in a row). */
+(function () {
+  const TWINS = [
+    ['Images/twins/twin_mountains.jpg', 'Digital Twin · Alpine'],
+    ['Images/twins/twin_scientist.jpg', 'Digital Twin · Scientist'],
+    ['Images/twins/twin_skier.jpg',     'Digital Twin · Skier'],
+    ['Images/twins/twin_hockey.jpg',    'Digital Twin · Hockey'],
+    ['Images/twins/twin_suit.jpg',      'Digital Twin · Business'],
+    ['Images/twins/twin_rotary.jpg',    'Digital Twin · Rotary'],
+    ['Images/twins/twin_malaika.jpg',   'Digital Twin · Malaika Kitchens'],
+    ['Images/twins/twin_presenter.jpg', 'Digital Twin · Speaker'],
+    ['Images/twins/twin_coder.jpg',     'Digital Twin · HELIX Coder'],
+    ['Images/twins/twin_darklab.jpg',   'Digital Twin · Night Lab'],
+  ];
+  const img = document.getElementById('twin-img');
+  const label = document.getElementById('twin-label');
+  const card = document.getElementById('flip-card');
+  const scene = document.getElementById('flip-scene');
+
+  let bag = [], last = -1;
+  function nextTwin() {
+    if (!bag.length) {
+      bag = TWINS.map((_, i) => i);
+      for (let i = bag.length - 1; i > 0; i--) {           // Fisher–Yates shuffle
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+      if (bag[bag.length - 1] === last) {                  // no back-to-back repeat
+        [bag[0], bag[bag.length - 1]] = [bag[bag.length - 1], bag[0]];
+      }
+    }
+    last = bag.pop();
+    img.src = TWINS[last][0];
+    label.textContent = TWINS[last][1];
+  }
+  nextTwin();                                              // random twin on page load
+
+  /* Desktop: swap just before the hover-flip reveals the back face */
+  scene.addEventListener('mouseenter', () => {
+    if (window.matchMedia('(hover: hover)').matches && !card.classList.contains('flipped')) nextTwin();
+  });
+  /* Touch: swap when tapping to flip to the back */
+  card.addEventListener('click', function () {
+    if (!this.classList.contains('flipped') && !window.matchMedia('(hover: hover)').matches) nextTwin();
+    this.classList.toggle('flipped');
+  });
+
+  /* Preload all twins after load so hovers are instant */
+  window.addEventListener('load', () => TWINS.forEach(t => { new Image().src = t[0]; }));
+})();
 
 /* Tool tabs are open (no password gate). */
 
