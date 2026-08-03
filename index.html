@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- dgschauer.com — website v12 · cel-shaded 3D cartoon mascot (modelled face) · acronym-only tool headers -->
+<!-- dgschauer.com — website v13 · Pixar-style 3D scientist mascot (lab coat, half-size, natural gait) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -1016,7 +1016,7 @@ footer p b { color: var(--accent); font-weight: 400; }
 /* ─── Walking AI mascot ─── */
 #walker {
   position: fixed; bottom: 8px; left: 0; z-index: 40;
-  width: 120px; height: 178px;
+  width: 64px; height: 96px;
   --x: 60px;
   --y: 0px;              /* vertical offset — negative = climbed up */
   transform: translate(var(--x), var(--y));
@@ -1143,7 +1143,7 @@ footer p b { color: var(--accent); font-weight: 400; }
 @keyframes w-dangleB { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(-12deg); } }
 
 .walker-bubble {
-  position: absolute; bottom: 100px; left: 50%;
+  position: absolute; bottom: 92px; left: 50%;
   transform: translate(-50%, 8px) scale(0.95);
   width: max-content; max-width: 220px;
   background: var(--glass);
@@ -2377,13 +2377,13 @@ document.getElementById('flip-card').addEventListener('click', function () {
 })();
 </script>
 
-<!-- ═══ 3D CARTOON MASCOT (three.js, cel-shaded) ═══
-     A stylised TV-cartoon character (modelled head & face, hair, clothes) that
-     walks the page, climbs onto words, sits, and hops down. Movement logic
-     drives the #walker container; the character poses itself from live state. -->
+<!-- ═══ 3D CARTOON SCIENTIST MASCOT (three.js, Pixar-style) ═══
+     A stylised 3D scientist — dark swept hair, lab coat over blue shirt —
+     modelled on David's avatar. Walks the page facing his direction of
+     travel, climbs onto words, sits, hops down. -->
 <script>
 (function () {
-  if (!window.THREE) return;                       // no 3D lib → mascot stays hidden
+  if (!window.THREE) return;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const walker = document.getElementById('walker');
   const bubble = document.getElementById('walker-bubble');
@@ -2392,126 +2392,128 @@ document.getElementById('flip-card').addEventListener('click', function () {
 
   /* ─────────────── renderer / scene ─────────────── */
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+  renderer.setPixelRatio(Math.min(2.5, window.devicePixelRatio || 1.5));
   if (renderer.outputEncoding !== undefined && THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
-  const CW = 120, CH = 178;
+  const CW = 64, CH = 96;                        // half-size mascot
   renderer.setSize(CW, CH, false);
 
   const scene = new THREE.Scene();
-  const cam = new THREE.PerspectiveCamera(34, CW / CH, 0.1, 100);
-  cam.position.set(0.12, 1.38, 5.75);
-  cam.lookAt(0, 1.18, 0);
+  const cam = new THREE.PerspectiveCamera(32, CW / CH, 0.1, 100);
+  cam.position.set(0.1, 1.3, 6.0);
+  cam.lookAt(0, 1.14, 0);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-  const key = new THREE.DirectionalLight(0xffffff, 0.85); key.position.set(2, 4, 3.5); scene.add(key);
-  const fillL = new THREE.DirectionalLight(0xdfeaff, 0.32); fillL.position.set(-3, 1.5, 2); scene.add(fillL);
+  // soft "animation studio" lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.78));
+  const key = new THREE.DirectionalLight(0xfff3e2, 0.85); key.position.set(2, 4, 3.5); scene.add(key);
+  const fillL = new THREE.DirectionalLight(0xbcd4ff, 0.32); fillL.position.set(-3, 1.5, 2); scene.add(fillL);
+  const rimL = new THREE.PointLight(0x6EE7B7, 0.22); rimL.position.set(-2, 2.4, -2); scene.add(rimL);
 
-  /* ─────────────── cel-shaded (toon) materials ─────────────── */
-  function toonGrad() {
-    const c = document.createElement('canvas'); c.width = 4; c.height = 1;
-    const g = c.getContext('2d');
-    ['#7d7d7d', '#a8a8a8', '#d8d8d8', '#ffffff'].forEach((col, i) => { g.fillStyle = col; g.fillRect(i, 0, 1, 1); });
-    const t = new THREE.CanvasTexture(c);
-    t.minFilter = THREE.NearestFilter; t.magFilter = THREE.NearestFilter; t.generateMipmaps = false;
-    return t;
-  }
-  const GRAD = toonGrad();
-  const useToon = !!THREE.MeshToonMaterial;
-  const M = (color) => useToon
-    ? new THREE.MeshToonMaterial({ color, gradientMap: GRAD })
-    : new THREE.MeshStandardMaterial({ color, roughness: 0.85, metalness: 0 });
-  const mSkin  = M(0xf0c39a);
-  const mHair  = M(0x2b1d15);
-  const mShirt = M(0x2f9e79);   // brand-teal top
-  const mPants = M(0x2b3a54);
-  const mShoe  = M(0x171e2a);
-  const mMouth = M(0x7a3630);
-  const eyeWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  const irisMat  = new THREE.MeshBasicMaterial({ color: 0x5b3a22 });
-  const pupilMat = new THREE.MeshBasicMaterial({ color: 0x120c08 });
+  /* ─────────────── materials (smooth Pixar look) ─────────────── */
+  const M = (c, r) => new THREE.MeshStandardMaterial({ color: c, roughness: r === undefined ? 0.65 : r, metalness: 0 });
+  const mSkin  = M(0xf2c9a0, 0.62);
+  const mHair  = M(0x241a11, 0.55);
+  const mCoat  = M(0xf2f4f7, 0.7);
+  const mShirt = M(0x4a86d8, 0.62);
+  const mPants = M(0x2c3340, 0.7);
+  const mShoe  = M(0x171c26, 0.5);
+  const mMouth = M(0x9c4f43, 0.55);
+  const eyeWhite = new THREE.MeshBasicMaterial({ color: 0xfdfdfd });
+  const irisMat  = new THREE.MeshBasicMaterial({ color: 0x7d7a4b });   // hazel-green
+  const pupilMat = new THREE.MeshBasicMaterial({ color: 0x10100c });
   const shineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-  const blushMat = new THREE.MeshBasicMaterial({ color: 0xffa38f, transparent: true, opacity: 0.45 });
+  const blushMat = new THREE.MeshBasicMaterial({ color: 0xe89a83, transparent: true, opacity: 0.22 });
 
-  /* ─────────────── build the character ─────────────── */
+  /* ─────────────── build the scientist ─────────────── */
   const char = new THREE.Group();
   scene.add(char);
 
-  // torso group (twists as a unit)
-  const chest = new THREE.Group(); chest.position.y = 0.84; char.add(chest);
-  const pelvis = new THREE.Mesh(new THREE.SphereGeometry(0.34, 20, 20), mPants);
-  pelvis.scale.set(1.0, 0.72, 0.86); pelvis.position.y = 0.0; chest.add(pelvis);
-  const torso = new THREE.Mesh(new THREE.SphereGeometry(0.42, 26, 26), mShirt);
-  torso.scale.set(0.94, 1.12, 0.82); torso.position.y = 0.34; chest.add(torso);
-  const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.16, 0.1, 16), mShirt);
-  collar.position.y = 0.66; chest.add(collar);
-  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.11, 0.14, 14), mSkin);
-  neck.position.y = 0.72; chest.add(neck);
+  const chest = new THREE.Group(); chest.position.y = 0.8; char.add(chest);
 
-  // head + face (child of chest so it turns with the body twist)
-  const head = new THREE.Group(); head.position.y = 1.16; chest.add(head);   // ≈ world 2.0
-  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), mSkin);
-  skull.scale.set(1.0, 1.06, 0.97); head.add(skull);
-  const jaw = new THREE.Mesh(new THREE.SphereGeometry(0.4, 28, 28), mSkin);
-  jaw.scale.set(0.92, 0.7, 0.9); jaw.position.set(0, -0.24, 0.02); head.add(jaw);
-  // ears
+  // lab-coat torso + flared coat skirt (covers the hips)
+  const torso = new THREE.Mesh(new THREE.SphereGeometry(0.4, 28, 28), mCoat);
+  torso.scale.set(0.95, 1.14, 0.84); torso.position.y = 0.3; chest.add(torso);
+  const skirt = new THREE.Mesh(new THREE.CylinderGeometry(0.37, 0.46, 0.5, 22), mCoat);
+  skirt.position.y = -0.12; chest.add(skirt);
+  // blue shirt V under the coat + lapels
+  const shirtV = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.2, 0.34, 3), mShirt);
+  shirtV.rotation.x = Math.PI / 2 + 0.24; shirtV.rotation.y = Math.PI;
+  shirtV.position.set(0, 0.5, 0.24); chest.add(shirtV);
   [-1, 1].forEach(sx => {
-    const e = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 16), mSkin);
-    e.position.set(sx * 0.49, -0.03, 0.02); e.scale.set(0.65, 1.0, 0.7); head.add(e);
+    const lap = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.3, 0.05), mCoat);
+    lap.position.set(sx * 0.14, 0.48, 0.3); lap.rotation.z = sx * 0.42; chest.add(lap);
   });
-  // hair — cap + front fringe + sideburns
-  const hair = new THREE.Mesh(new THREE.SphereGeometry(0.52, 32, 32), mHair);
-  hair.scale.set(1.04, 0.94, 1.05); hair.position.set(0, 0.12, -0.03); head.add(hair);
-  const fringe = new THREE.Mesh(new THREE.SphereGeometry(0.5, 28, 20), mHair);
-  fringe.scale.set(1.03, 0.42, 1.04); fringe.position.set(0, 0.30, 0.06); head.add(fringe);
-  [-1, 1].forEach(sx => {
-    const s = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.2, 0.14), mHair);
-    s.position.set(sx * 0.46, 0.06, 0.18); head.add(s);
-  });
-  // eyes (big & cartoonish)
-  [-1, 1].forEach(sx => {
-    const w = new THREE.Mesh(new THREE.SphereGeometry(0.15, 24, 24), eyeWhite);
-    w.position.set(sx * 0.2, 0.04, 0.4); w.scale.set(1, 1.18, 0.6); head.add(w);
-    const ir = new THREE.Mesh(new THREE.SphereGeometry(0.078, 20, 20), irisMat);
-    ir.position.set(sx * 0.2, 0.01, 0.49); ir.scale.set(1, 1, 0.45); head.add(ir);
-    const pu = new THREE.Mesh(new THREE.SphereGeometry(0.042, 16, 16), pupilMat);
-    pu.position.set(sx * 0.2, 0.01, 0.52); pu.scale.set(1, 1, 0.4); head.add(pu);
-    const sh = new THREE.Mesh(new THREE.SphereGeometry(0.02, 10, 10), shineMat);
-    sh.position.set(sx * 0.2 + 0.035, 0.07, 0.54); head.add(sh);
-    const br = new THREE.Mesh(new THREE.BoxGeometry(0.17, 0.04, 0.05), mHair);
-    br.position.set(sx * 0.2, 0.22, 0.44); br.rotation.z = sx * 0.14; head.add(br);
-    const bl = new THREE.Mesh(new THREE.CircleGeometry(0.075, 18), blushMat);
-    bl.position.set(sx * 0.29, -0.11, 0.44); head.add(bl);
-  });
-  // nose
-  const nose = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 16), mSkin);
-  nose.position.set(0, -0.06, 0.49); nose.scale.set(1, 0.85, 1.15); head.add(nose);
-  // smile (half-torus arc)
-  const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.03, 10, 22, Math.PI), mMouth);
-  mouth.position.set(0, -0.2, 0.43); mouth.rotation.z = Math.PI; head.add(mouth);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 0.14, 14), mSkin);
+  neck.position.y = 0.68; chest.add(neck);
+  const collar = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.035, 10, 20), mShirt);
+  collar.rotation.x = Math.PI / 2; collar.position.y = 0.62; chest.add(collar);
 
-  // limbs
+  // head — natural proportions, modelled face
+  const head = new THREE.Group(); head.position.y = 1.12; chest.add(head);
+  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.42, 32, 32), mSkin);
+  skull.scale.set(0.98, 1.06, 0.94); head.add(skull);
+  const jaw = new THREE.Mesh(new THREE.SphereGeometry(0.35, 28, 28), mSkin);
+  jaw.scale.set(0.9, 0.72, 0.88); jaw.position.set(0, -0.2, 0.03); head.add(jaw);
+  [-1, 1].forEach(sx => {
+    const e = new THREE.Mesh(new THREE.SphereGeometry(0.08, 14, 14), mSkin);
+    e.position.set(sx * 0.4, -0.02, 0.02); e.scale.set(0.6, 1, 0.7); head.add(e);
+  });
+  // dark swept-back quiff (like the template)
+  const hairBack = new THREE.Mesh(new THREE.SphereGeometry(0.435, 30, 30), mHair);
+  hairBack.scale.set(1.04, 0.98, 1.03); hairBack.position.set(0, 0.11, -0.07); head.add(hairBack);
+  const quiff = new THREE.Mesh(new THREE.SphereGeometry(0.3, 24, 24), mHair);
+  quiff.scale.set(1.1, 0.72, 0.95); quiff.position.set(0, 0.4, 0.09); quiff.rotation.x = -0.28; head.add(quiff);
+  const swoosh = new THREE.Mesh(new THREE.SphereGeometry(0.2, 20, 20), mHair);
+  swoosh.scale.set(0.95, 0.62, 0.75); swoosh.position.set(0.04, 0.46, 0.24); swoosh.rotation.x = -0.5; head.add(swoosh);
+  [-1, 1].forEach(sx => {
+    const s = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.16, 0.12), mHair);
+    s.position.set(sx * 0.395, 0.08, 0.14); head.add(s);
+  });
+  // thick brows, natural eyes, nose, gentle smile, faint blush
+  [-1, 1].forEach(sx => {
+    const br = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.045, 0.05), mHair);
+    br.position.set(sx * 0.17, 0.17, 0.36); br.rotation.z = sx * 0.06; head.add(br);
+    const w = new THREE.Mesh(new THREE.SphereGeometry(0.105, 22, 22), eyeWhite);
+    w.position.set(sx * 0.165, 0.05, 0.32); w.scale.set(1, 1.2, 0.55); head.add(w);
+    const ir = new THREE.Mesh(new THREE.SphereGeometry(0.055, 18, 18), irisMat);
+    ir.position.set(sx * 0.165, 0.03, 0.39); ir.scale.set(1, 1, 0.4); head.add(ir);
+    const pu = new THREE.Mesh(new THREE.SphereGeometry(0.028, 14, 14), pupilMat);
+    pu.position.set(sx * 0.165, 0.03, 0.41); pu.scale.set(1, 1, 0.4); head.add(pu);
+    const sh = new THREE.Mesh(new THREE.SphereGeometry(0.013, 8, 8), shineMat);
+    sh.position.set(sx * 0.165 + 0.025, 0.075, 0.425); head.add(sh);
+    const bl = new THREE.Mesh(new THREE.CircleGeometry(0.06, 16), blushMat);
+    bl.position.set(sx * 0.26, -0.09, 0.36); head.add(bl);
+  });
+  const nose = new THREE.Mesh(new THREE.SphereGeometry(0.055, 16, 16), mSkin);
+  nose.position.set(0, -0.05, 0.42); nose.scale.set(1, 0.9, 1.2); head.add(nose);
+  const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.085, 0.017, 8, 20, Math.PI * 0.85), mMouth);
+  mouth.position.set(0, -0.16, 0.37); mouth.rotation.z = Math.PI + (Math.PI * 0.075); head.add(mouth);
+
+  // limbs — coat sleeves + skin hands, trouser legs + shoes
   function legLimb(x) {
-    const pivot = new THREE.Group(); pivot.position.set(x, 0.84, 0); char.add(pivot);
-    const up = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.155, 0.42, 16), mPants); up.position.y = -0.21; pivot.add(up);
-    const knee = new THREE.Group(); knee.position.y = -0.42; pivot.add(knee);
-    const lo = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.4, 16), mPants); lo.position.y = -0.2; knee.add(lo);
-    const shoe = new THREE.Mesh(new THREE.SphereGeometry(0.16, 18, 18), mShoe);
-    shoe.scale.set(0.9, 0.6, 1.4); shoe.position.set(0, -0.42, 0.07); knee.add(shoe);
+    const pivot = new THREE.Group(); pivot.position.set(x, 0.72, 0); char.add(pivot);
+    const up = new THREE.Mesh(new THREE.CylinderGeometry(0.115, 0.135, 0.38, 16), mPants); up.position.y = -0.19; pivot.add(up);
+    const knee = new THREE.Group(); knee.position.y = -0.38; pivot.add(knee);
+    const lo = new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.115, 0.34, 16), mPants); lo.position.y = -0.17; knee.add(lo);
+    const shoe = new THREE.Mesh(new THREE.SphereGeometry(0.135, 18, 18), mShoe);
+    shoe.scale.set(0.85, 0.55, 1.45); shoe.position.set(0, -0.36, 0.07); knee.add(shoe);
     return { pivot, knee };
   }
   function armLimb(x) {
-    const pivot = new THREE.Group(); pivot.position.set(x, 0.52, 0); chest.add(pivot);
-    const up = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 0.32, 14), mShirt); up.position.y = -0.16; pivot.add(up);
+    const pivot = new THREE.Group(); pivot.position.set(x, 0.5, 0); chest.add(pivot);
+    const up = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.1, 0.32, 14), mCoat); up.position.y = -0.16; pivot.add(up);
     const knee = new THREE.Group(); knee.position.y = -0.32; pivot.add(knee);
-    const lo = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.085, 0.28, 14), mSkin); lo.position.y = -0.14; knee.add(lo);
-    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), mSkin); hand.position.y = -0.3; knee.add(hand);
+    const lo = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.082, 0.26, 14), mCoat); lo.position.y = -0.13; knee.add(lo);
+    const cuff = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.04, 12), mShirt);
+    cuff.position.y = -0.26; knee.add(cuff);
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 16), mSkin); hand.position.y = -0.31; knee.add(hand);
     return { pivot, knee };
   }
-  const legL = legLimb(-0.17), legR = legLimb(0.17);
-  const armL = armLimb(-0.34), armR = armLimb(0.34);
+  const legL = legLimb(-0.16), legR = legLimb(0.16);
+  const armL = armLimb(-0.42), armR = armLimb(0.42);
 
-  /* ── smooth-pose rig ── */
-  const rig = { legLh:0, legRh:0, legLk:0, legRk:0, armLh:0, armRh:0, armLk:0.2, armRk:0.2,
+  /* ── smooth-pose rig ──
+     Conventions: hip/shoulder rotation.x  +back / −forward · knee + bends shin back · elbow − bends forearm forward */
+  const rig = { legLh:0, legRh:0, legLk:0.06, legRk:0.06, armLh:0, armRh:0, armLk:-0.2, armRk:-0.2,
                 yaw:0, lean:0, roll:0, bob:0, sink:0, headPitch:0, headYaw:0, chestYaw:0 };
   const T = Object.assign({}, rig);
   function approach(dt) { const k = Math.min(1, dt * 11); for (const key in rig) rig[key] += (T[key] - rig[key]) * k; }
@@ -2520,49 +2522,53 @@ document.getElementById('flip-card').addEventListener('click', function () {
     legL.knee.rotation.x = rig.legLk; legR.knee.rotation.x = rig.legRk;
     armL.pivot.rotation.x = rig.armLh; armR.pivot.rotation.x = rig.armRh;
     armL.knee.rotation.x = rig.armLk; armR.knee.rotation.x = rig.armRk;
-    armL.pivot.rotation.z = 0.16; armR.pivot.rotation.z = -0.16;
+    armL.pivot.rotation.z = 0.14; armR.pivot.rotation.z = -0.14;
     char.rotation.y = rig.yaw; char.rotation.x = rig.lean; char.rotation.z = rig.roll;
     char.position.y = rig.bob - rig.sink;
     head.rotation.x = rig.headPitch; head.rotation.y = rig.headYaw;
     chest.rotation.y = rig.chestYaw;
   }
   function setTargets(state, tSec, faceDir) {
-    const view = faceDir * -0.6;
+    const view = faceDir * 0.82;                   // FACE the walk direction (backwards bug fixed)
     if (state === 'walk') {
-      const cad = 8.6, s = Math.sin(tSec * cad);
-      T.legLh = s * 0.62; T.legRh = -s * 0.62;
-      T.legLk = Math.max(0.04, Math.sin(tSec * cad + Math.PI * 0.5)) * 0.8;
-      T.legRk = Math.max(0.04, Math.sin(tSec * cad - Math.PI * 0.5)) * 0.8;
-      T.armLh = -s * 0.55; T.armRh = s * 0.55; T.armLk = 0.4; T.armRk = 0.4;
-      T.bob = Math.abs(Math.sin(tSec * cad)) * 0.06; T.sink = 0;
-      T.yaw = view; T.lean = 0.05; T.roll = Math.sin(tSec * cad) * 0.03;
-      T.chestYaw = Math.sin(tSec * cad) * 0.13; T.headYaw = -T.chestYaw * 0.5; T.headPitch = 0;
+      const cad = 7.6, s = Math.sin(tSec * cad), c = Math.cos(tSec * cad);
+      // legs: thigh swings ±, knee bends most during the forward swing — natural gait
+      T.legLh = s * 0.5;  T.legRh = -s * 0.5;
+      T.legLk = 0.1 + Math.max(0, -c) * 0.72;
+      T.legRk = 0.1 + Math.max(0,  c) * 0.72;
+      // arms: counter-swing with relaxed elbows that flex as the arm comes forward
+      T.armLh = -s * 0.42; T.armRh = s * 0.42;
+      T.armLk = -(0.18 + Math.max(0,  s) * 0.4);
+      T.armRk = -(0.18 + Math.max(0, -s) * 0.4);
+      T.bob = Math.abs(s) * 0.045; T.sink = 0;
+      T.yaw = view; T.lean = -0.045; T.roll = s * 0.025;
+      T.chestYaw = s * 0.1; T.headYaw = -s * 0.06; T.headPitch = 0;
     } else if (state === 'climb' || state === 'drop') {
-      T.legLh = -0.8; T.legRh = -0.8; T.legLk = 1.2; T.legRk = 1.2;
-      T.armLh = -1.9; T.armRh = -1.9; T.armLk = 0.5; T.armRk = 0.5;
-      T.bob = 0; T.sink = 0; T.yaw = view; T.lean = 0.16; T.roll = 0;
-      T.chestYaw = 0; T.headYaw = 0; T.headPitch = -0.12;
+      T.legLh = -0.7; T.legRh = -0.9; T.legLk = 1.1; T.legRk = 1.3;
+      T.armLh = -2.1; T.armRh = -1.8; T.armLk = -0.4; T.armRk = -0.5;
+      T.bob = 0; T.sink = 0; T.yaw = view; T.lean = -0.12; T.roll = 0;
+      T.chestYaw = 0; T.headYaw = 0; T.headPitch = -0.14;
     } else if (state === 'sit') {
-      const s = Math.sin(tSec * 1.6);
-      T.legLh = -1.5; T.legRh = -1.5; T.legLk = 1.75; T.legRk = 1.75;
-      T.armLh = -0.5; T.armRh = -0.5; T.armLk = 0.95; T.armRk = 0.95;
-      T.bob = 0; T.sink = 0.36; T.yaw = 0.18 * s; T.lean = 0.05; T.roll = s * 0.03;
-      T.chestYaw = 0; T.headYaw = 0.14 * s; T.headPitch = 0.05;
+      const s = Math.sin(tSec * 1.5);
+      T.legLh = -1.45; T.legRh = -1.45; T.legLk = 1.6 + s * 0.06; T.legRk = 1.6 - s * 0.05;
+      T.armLh = -0.45; T.armRh = -0.45; T.armLk = 0.8; T.armRk = 0.8;   // hands resting on knees
+      T.bob = 0; T.sink = 0.3; T.yaw = 0.16 * s; T.lean = -0.03; T.roll = s * 0.025;
+      T.chestYaw = 0; T.headYaw = 0.15 * s; T.headPitch = 0.04;
     } else if (state === 'fallen') {
-      T.legLh = 0.35; T.legRh = -0.2; T.legLk = 0.4; T.legRk = 0.6;
-      T.armLh = 0.9; T.armRh = -0.7; T.armLk = 0.3; T.armRk = 0.3;
-      T.bob = 0; T.sink = 0.5; T.yaw = 0; T.lean = 0; T.roll = faceDir * 1.5;
+      T.legLh = 0.3; T.legRh = -0.2; T.legLk = 0.5; T.legRk = 0.7;
+      T.armLh = 0.9; T.armRh = -0.7; T.armLk = -0.3; T.armRk = -0.3;
+      T.bob = 0; T.sink = 0.44; T.yaw = 0; T.lean = 0; T.roll = faceDir * 1.5;
       T.chestYaw = 0; T.headYaw = 0; T.headPitch = 0;
-    } else { // idle
-      const s = Math.sin(tSec * 1.9), s2 = Math.sin(tSec * 0.6);
-      T.legLh = 0.02; T.legRh = -0.02; T.legLk = 0.05; T.legRk = 0.05;
-      T.armLh = s * 0.07; T.armRh = -s * 0.07; T.armLk = 0.22; T.armRk = 0.22;
-      T.bob = s * 0.015; T.sink = 0; T.yaw = s2 * 0.28; T.lean = 0.02; T.roll = 0;
-      T.chestYaw = 0; T.headYaw = s2 * 0.4; T.headPitch = 0.03;
+    } else { // idle — breathe, shift weight, glance around
+      const s = Math.sin(tSec * 1.8), s2 = Math.sin(tSec * 0.55);
+      T.legLh = 0.02; T.legRh = -0.02; T.legLk = 0.06; T.legRk = 0.06;
+      T.armLh = s * 0.05; T.armRh = -s * 0.05; T.armLk = -0.22; T.armRk = -0.22;
+      T.bob = s * 0.012; T.sink = 0; T.yaw = s2 * 0.3; T.lean = 0; T.roll = 0;
+      T.chestYaw = 0; T.headYaw = s2 * 0.4; T.headPitch = 0.02;
     }
   }
 
-  /* ─────────────── movement state machine (drives #walker) ─────────────── */
+  /* ─────────────── movement state machine ─────────────── */
   const lines = [
     "Hi — I'm David's <b>AI twin</b>. Ask the real one about plasmonics.",
     "The <b>HELIX</b>, <b>OWL</b> and <b>SCAFFOLD</b> tabs run live in your browser. 🔬",
@@ -2579,7 +2585,7 @@ document.getElementById('flip-card').addEventListener('click', function () {
   ];
   const complaints = ["Ouch! Hey! 😵", "Rude! I'm walking here! 🌀", "I'll allow it… once. 😤", "Toppled, not defeated! 💫"];
 
-  const CHAR_W = 120;
+  const CHAR_W = 64;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const floorMax = () => window.innerWidth - CHAR_W - 2;
   const floorBottomY = () => window.innerHeight - 8;
@@ -2612,8 +2618,8 @@ document.getElementById('flip-card').addEventListener('click', function () {
   function isPerchable(el) {
     if (!el || el.offsetParent === null) return false;
     const r = el.getBoundingClientRect();
-    return r.width > 26 && r.width < window.innerWidth * 0.92 &&
-           r.top > 78 && r.top < window.innerHeight - 150 && r.bottom < window.innerHeight - 40;
+    return r.width > 22 && r.width < window.innerWidth * 0.92 &&
+           r.top > 76 && r.top < window.innerHeight - 120 && r.bottom < window.innerHeight - 30;
   }
   function pickPerch() {
     const sel = 'h1.name, .panel-header h2, .sc-card h3, .pub-card h3, .chip, .stat, .pill, .helix-title, .ph-label, .ribbon-brand span, .tool-meaning b, .hf-node b';
@@ -2622,16 +2628,16 @@ document.getElementById('flip-card').addEventListener('click', function () {
     return nodes.length ? nodes[Math.floor(Math.random() * nodes.length)] : null;
   }
   function xForEl(el) { const r = el.getBoundingClientRect(); return clamp(r.left + r.width / 2 - CHAR_W / 2, 4, floorMax()); }
-  function yForEl(el) { const r = el.getBoundingClientRect(); return (r.top - 4) - floorBottomY(); }
+  function yForEl(el) { const r = el.getBoundingClientRect(); return (r.top - 3) - floorBottomY(); }
 
   function startWalk() { state = 'walk'; }
   function startIdle(ms) { state = 'idle'; y = 0; apply(); idleUntil = performance.now() + (ms || (1400 + Math.random() * 2600)); }
-  function startJump(x1, y1, peak, next) { state = 'climb'; setFace(x1 >= x ? 1 : -1); jump = { t0: performance.now(), dur: 620, x0: x, x1, y0: y, y1, peak, next }; }
+  function startJump(x1, y1, peak, next) { state = 'climb'; setFace(x1 >= x ? 1 : -1); jump = { t0: performance.now(), dur: 600, x0: x, x1, y0: y, y1, peak, next }; }
   function startSit() { state = 'sit'; sitUntil = performance.now() + (4200 + Math.random() * 5200); if (Math.random() < 0.85) say(perchLines[Math.floor(Math.random() * perchLines.length)]); }
   function startDrop() {
-    const land = clamp(x + faceDir * (70 + Math.random() * 90), 4, floorMax());
+    const land = clamp(x + faceDir * (46 + Math.random() * 70), 4, floorMax());
     perchEl = null; goingToPerch = false; state = 'drop';
-    jump = { t0: performance.now(), dur: 620, x0: x, x1: land, y0: y, y1: 0, peak: 52, next: () => startIdle(700) };
+    jump = { t0: performance.now(), dur: 600, x0: x, x1: land, y0: y, y1: 0, peak: 34, next: () => startIdle(700) };
   }
   function decide() {
     if (Math.random() < 0.6) {
@@ -2639,7 +2645,7 @@ document.getElementById('flip-card').addEventListener('click', function () {
       if (el) { perchEl = el; goingToPerch = true; targetX = xForEl(el); startWalk(); return; }
     }
     goingToPerch = false; perchEl = null;
-    targetX = clamp(24 + Math.random() * (floorMax() - 24), 4, floorMax());
+    targetX = clamp(20 + Math.random() * (floorMax() - 20), 4, floorMax());
     startWalk();
   }
 
@@ -2650,10 +2656,10 @@ document.getElementById('flip-card').addEventListener('click', function () {
     if (state === 'walk') {
       const dx = targetX - x, dist = Math.abs(dx);
       setFace(dx >= 0 ? 1 : -1);
-      const step = 130 * dt;
+      const step = 88 * dt;                        // calmer stroll for the smaller body
       if (dist <= step) {
         x = targetX; apply();
-        if (goingToPerch && perchEl && isPerchable(perchEl)) startJump(xForEl(perchEl), yForEl(perchEl), 40, startSit);
+        if (goingToPerch && perchEl && isPerchable(perchEl)) startJump(xForEl(perchEl), yForEl(perchEl), 28, startSit);
         else startIdle();
       } else { x += Math.sign(dx) * step; apply(); }
     } else if (state === 'climb' || state === 'drop') {
@@ -2681,7 +2687,7 @@ document.getElementById('flip-card').addEventListener('click', function () {
     if (!walker.classList.contains('show') || state === 'fallen') return;
     const r = walker.getBoundingClientRect();
     const cx = r.left + r.width / 2;
-    if (e.clientX < cx - 42 || e.clientX > cx + 42 || e.clientY < r.top + 20 || e.clientY > r.bottom) return;
+    if (e.clientX < cx - 24 || e.clientX > cx + 24 || e.clientY < r.top + 8 || e.clientY > r.bottom) return;
     state = 'fallen'; y = 0; apply();
     say(complaints[Math.floor(Math.random() * complaints.length)]);
     setTimeout(() => { say("Okay, back up! 💪"); startIdle(500); }, 3000);
