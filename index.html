@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- dgschauer.com — website v11 · acronym-only tool headers · full 3D three.js humanoid mascot -->
+<!-- dgschauer.com — website v12 · cel-shaded 3D cartoon mascot (modelled face) · acronym-only tool headers -->
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -2377,10 +2377,10 @@ document.getElementById('flip-card').addEventListener('click', function () {
 })();
 </script>
 
-<!-- ═══ 3D HUMANOID MASCOT (three.js) ═══
-     A fully 3D articulated character that walks the page, climbs onto words,
-     sits, and hops down. Movement logic drives the #walker container; the
-     WebGL humanoid inside #walker-canvas poses itself from the live state. -->
+<!-- ═══ 3D CARTOON MASCOT (three.js, cel-shaded) ═══
+     A stylised TV-cartoon character (modelled head & face, hair, clothes) that
+     walks the page, climbs onto words, sits, and hops down. Movement logic
+     drives the #walker container; the character poses itself from live state. -->
 <script>
 (function () {
   if (!window.THREE) return;                       // no 3D lib → mascot stays hidden
@@ -2390,148 +2390,175 @@ document.getElementById('flip-card').addEventListener('click', function () {
   const canvas = document.getElementById('walker-canvas');
   if (!walker || !canvas) return;
 
-  /* ─────────────── build the 3D humanoid ─────────────── */
+  /* ─────────────── renderer / scene ─────────────── */
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+  if (renderer.outputEncoding !== undefined && THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
   const CW = 120, CH = 178;
   renderer.setSize(CW, CH, false);
 
   const scene = new THREE.Scene();
-  const cam = new THREE.PerspectiveCamera(32, CW / CH, 0.1, 100);
-  cam.position.set(0.15, 1.12, 5.15);
-  cam.lookAt(0, 0.92, 0);
+  const cam = new THREE.PerspectiveCamera(34, CW / CH, 0.1, 100);
+  cam.position.set(0.12, 1.38, 5.75);
+  cam.lookAt(0, 1.18, 0);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.72));
-  const key = new THREE.DirectionalLight(0xffffff, 1.05); key.position.set(2.5, 4, 3); scene.add(key);
-  const rim = new THREE.PointLight(0x6EE7B7, 0.9); rim.position.set(-3, 1.2, 2.2); scene.add(rim);
-  const fill = new THREE.PointLight(0x34D399, 0.4); fill.position.set(2, 0.4, 3); scene.add(fill);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+  const key = new THREE.DirectionalLight(0xffffff, 0.85); key.position.set(2, 4, 3.5); scene.add(key);
+  const fillL = new THREE.DirectionalLight(0xdfeaff, 0.32); fillL.position.set(-3, 1.5, 2); scene.add(fillL);
 
-  const matBody = new THREE.MeshStandardMaterial({ color: 0x14324a, roughness: 0.5, metalness: 0.45 });
-  const matDark = new THREE.MeshStandardMaterial({ color: 0x0d2032, roughness: 0.6, metalness: 0.4 });
-  const matAcc  = new THREE.MeshStandardMaterial({ color: 0x34D399, roughness: 0.34, metalness: 0.3, emissive: 0x0c3b2b, emissiveIntensity: 0.6 });
-  const matHead = new THREE.MeshStandardMaterial({ color: 0x1a3b52, roughness: 0.5, metalness: 0.3 });
+  /* ─────────────── cel-shaded (toon) materials ─────────────── */
+  function toonGrad() {
+    const c = document.createElement('canvas'); c.width = 4; c.height = 1;
+    const g = c.getContext('2d');
+    ['#7d7d7d', '#a8a8a8', '#d8d8d8', '#ffffff'].forEach((col, i) => { g.fillStyle = col; g.fillRect(i, 0, 1, 1); });
+    const t = new THREE.CanvasTexture(c);
+    t.minFilter = THREE.NearestFilter; t.magFilter = THREE.NearestFilter; t.generateMipmaps = false;
+    return t;
+  }
+  const GRAD = toonGrad();
+  const useToon = !!THREE.MeshToonMaterial;
+  const M = (color) => useToon
+    ? new THREE.MeshToonMaterial({ color, gradientMap: GRAD })
+    : new THREE.MeshStandardMaterial({ color, roughness: 0.85, metalness: 0 });
+  const mSkin  = M(0xf0c39a);
+  const mHair  = M(0x2b1d15);
+  const mShirt = M(0x2f9e79);   // brand-teal top
+  const mPants = M(0x2b3a54);
+  const mShoe  = M(0x171e2a);
+  const mMouth = M(0x7a3630);
+  const eyeWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const irisMat  = new THREE.MeshBasicMaterial({ color: 0x5b3a22 });
+  const pupilMat = new THREE.MeshBasicMaterial({ color: 0x120c08 });
+  const shineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const blushMat = new THREE.MeshBasicMaterial({ color: 0xffa38f, transparent: true, opacity: 0.45 });
 
+  /* ─────────────── build the character ─────────────── */
   const char = new THREE.Group();
   scene.add(char);
 
-  // torso
-  const hips = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.3, 0.3), matDark);
-  hips.position.y = 1.02; char.add(hips);
-  const belt = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.08, 0.33), matAcc);
-  belt.position.y = 1.15; char.add(belt);
-  const chest = new THREE.Group(); chest.position.y = 1.2; char.add(chest);
-  const chestMesh = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.52, 0.32), matBody);
-  chestMesh.position.y = 0.24; chest.add(chestMesh);
-  const core = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), matAcc);
-  core.position.set(0, 0.26, 0.17); chest.add(core);   // glowing "AI core"
+  // torso group (twists as a unit)
+  const chest = new THREE.Group(); chest.position.y = 0.84; char.add(chest);
+  const pelvis = new THREE.Mesh(new THREE.SphereGeometry(0.34, 20, 20), mPants);
+  pelvis.scale.set(1.0, 0.72, 0.86); pelvis.position.y = 0.0; chest.add(pelvis);
+  const torso = new THREE.Mesh(new THREE.SphereGeometry(0.42, 26, 26), mShirt);
+  torso.scale.set(0.94, 1.12, 0.82); torso.position.y = 0.34; chest.add(torso);
+  const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.16, 0.1, 16), mShirt);
+  collar.position.y = 0.66; chest.add(collar);
+  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.11, 0.14, 14), mSkin);
+  neck.position.y = 0.72; chest.add(neck);
 
-  // neck + head (turns with chest)
-  const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.12, 12), matDark);
-  neck.position.y = 0.55; chest.add(neck);
-  const head = new THREE.Group(); head.position.y = 0.74; chest.add(head);
-  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.27, 24, 24), matHead);
-  skull.scale.set(0.94, 1.02, 0.92); head.add(skull);
-  // face plate with David's avatar (embedded so it works over file:// and https alike)
-  const FACE_URI = 'data:image/jpeg;base64,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';
-  const tex = new THREE.TextureLoader().load(FACE_URI);
-  if (tex.colorSpace !== undefined && THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-  const face = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.34, 0.42),
-    new THREE.MeshBasicMaterial({ map: tex, transparent: true })
-  );
-  face.position.set(0, 0.01, 0.245); head.add(face);
-  const faceRing = new THREE.Mesh(new THREE.TorusGeometry(0.215, 0.02, 10, 28), matAcc);
-  faceRing.position.set(0, 0.01, 0.2); head.add(faceRing);
-  // antenna (AI twin motif)
-  const ant = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.16, 8), matDark);
-  ant.position.y = 0.34; head.add(ant);
-  const antTip = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 12), matAcc);
-  antTip.position.y = 0.43; head.add(antTip);
+  // head + face (child of chest so it turns with the body twist)
+  const head = new THREE.Group(); head.position.y = 1.16; chest.add(head);   // ≈ world 2.0
+  const skull = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), mSkin);
+  skull.scale.set(1.0, 1.06, 0.97); head.add(skull);
+  const jaw = new THREE.Mesh(new THREE.SphereGeometry(0.4, 28, 28), mSkin);
+  jaw.scale.set(0.92, 0.7, 0.9); jaw.position.set(0, -0.24, 0.02); head.add(jaw);
+  // ears
+  [-1, 1].forEach(sx => {
+    const e = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 16), mSkin);
+    e.position.set(sx * 0.49, -0.03, 0.02); e.scale.set(0.65, 1.0, 0.7); head.add(e);
+  });
+  // hair — cap + front fringe + sideburns
+  const hair = new THREE.Mesh(new THREE.SphereGeometry(0.52, 32, 32), mHair);
+  hair.scale.set(1.04, 0.94, 1.05); hair.position.set(0, 0.12, -0.03); head.add(hair);
+  const fringe = new THREE.Mesh(new THREE.SphereGeometry(0.5, 28, 20), mHair);
+  fringe.scale.set(1.03, 0.42, 1.04); fringe.position.set(0, 0.30, 0.06); head.add(fringe);
+  [-1, 1].forEach(sx => {
+    const s = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.2, 0.14), mHair);
+    s.position.set(sx * 0.46, 0.06, 0.18); head.add(s);
+  });
+  // eyes (big & cartoonish)
+  [-1, 1].forEach(sx => {
+    const w = new THREE.Mesh(new THREE.SphereGeometry(0.15, 24, 24), eyeWhite);
+    w.position.set(sx * 0.2, 0.04, 0.4); w.scale.set(1, 1.18, 0.6); head.add(w);
+    const ir = new THREE.Mesh(new THREE.SphereGeometry(0.078, 20, 20), irisMat);
+    ir.position.set(sx * 0.2, 0.01, 0.49); ir.scale.set(1, 1, 0.45); head.add(ir);
+    const pu = new THREE.Mesh(new THREE.SphereGeometry(0.042, 16, 16), pupilMat);
+    pu.position.set(sx * 0.2, 0.01, 0.52); pu.scale.set(1, 1, 0.4); head.add(pu);
+    const sh = new THREE.Mesh(new THREE.SphereGeometry(0.02, 10, 10), shineMat);
+    sh.position.set(sx * 0.2 + 0.035, 0.07, 0.54); head.add(sh);
+    const br = new THREE.Mesh(new THREE.BoxGeometry(0.17, 0.04, 0.05), mHair);
+    br.position.set(sx * 0.2, 0.22, 0.44); br.rotation.z = sx * 0.14; head.add(br);
+    const bl = new THREE.Mesh(new THREE.CircleGeometry(0.075, 18), blushMat);
+    bl.position.set(sx * 0.29, -0.11, 0.44); head.add(bl);
+  });
+  // nose
+  const nose = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 16), mSkin);
+  nose.position.set(0, -0.06, 0.49); nose.scale.set(1, 0.85, 1.15); head.add(nose);
+  // smile (half-torus arc)
+  const mouth = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.03, 10, 22, Math.PI), mMouth);
+  mouth.position.set(0, -0.2, 0.43); mouth.rotation.z = Math.PI; head.add(mouth);
 
-  // limb builder — returns {pivot, knee}
-  function limb(x, y, z, upLen, upR, loLen, loR, foot, parent) {
-    const pivot = new THREE.Group(); pivot.position.set(x, y, z); (parent || char).add(pivot);
-    pivot.add(new THREE.Mesh(new THREE.SphereGeometry(upR * 0.95, 12, 12), matAcc));
-    const up = new THREE.Mesh(new THREE.CylinderGeometry(upR * 0.82, upR, upLen, 14), matBody);
-    up.position.y = -upLen / 2; pivot.add(up);
-    const knee = new THREE.Group(); knee.position.y = -upLen; pivot.add(knee);
-    knee.add(new THREE.Mesh(new THREE.SphereGeometry(loR * 1.02, 12, 12), matAcc));
-    const lo = new THREE.Mesh(new THREE.CylinderGeometry(loR * 0.8, loR, loLen, 14), matBody);
-    lo.position.y = -loLen / 2; knee.add(lo);
-    if (foot) {
-      const ft = new THREE.Mesh(new THREE.BoxGeometry(loR * 2.4, loR * 1.2, loLen * 0.8), matDark);
-      ft.position.set(0, -loLen - loR * 0.3, loLen * 0.22); knee.add(ft);
-    } else {
-      const hand = new THREE.Mesh(new THREE.SphereGeometry(loR * 1.25, 12, 12), matAcc);
-      hand.position.y = -loLen - loR * 0.5; knee.add(hand);
-    }
+  // limbs
+  function legLimb(x) {
+    const pivot = new THREE.Group(); pivot.position.set(x, 0.84, 0); char.add(pivot);
+    const up = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.155, 0.42, 16), mPants); up.position.y = -0.21; pivot.add(up);
+    const knee = new THREE.Group(); knee.position.y = -0.42; pivot.add(knee);
+    const lo = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.4, 16), mPants); lo.position.y = -0.2; knee.add(lo);
+    const shoe = new THREE.Mesh(new THREE.SphereGeometry(0.16, 18, 18), mShoe);
+    shoe.scale.set(0.9, 0.6, 1.4); shoe.position.set(0, -0.42, 0.07); knee.add(shoe);
     return { pivot, knee };
   }
-
-  const legL = limb(-0.14, 1.0, 0, 0.5, 0.115, 0.42, 0.095, true);
-  const legR = limb( 0.14, 1.0, 0, 0.5, 0.115, 0.42, 0.095, true);
-  const armL = limb(-0.36, 0.52, 0, 0.4, 0.085, 0.36, 0.07, false, chest);
-  const armR = limb( 0.36, 0.52, 0, 0.4, 0.085, 0.36, 0.07, false, chest);
-
-  // ground contact shadow lives as the CSS .walker-shadow div
+  function armLimb(x) {
+    const pivot = new THREE.Group(); pivot.position.set(x, 0.52, 0); chest.add(pivot);
+    const up = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 0.32, 14), mShirt); up.position.y = -0.16; pivot.add(up);
+    const knee = new THREE.Group(); knee.position.y = -0.32; pivot.add(knee);
+    const lo = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.085, 0.28, 14), mSkin); lo.position.y = -0.14; knee.add(lo);
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), mSkin); hand.position.y = -0.3; knee.add(hand);
+    return { pivot, knee };
+  }
+  const legL = legLimb(-0.17), legR = legLimb(0.17);
+  const armL = armLimb(-0.34), armR = armLimb(0.34);
 
   /* ── smooth-pose rig ── */
-  const rig = {
-    legLh: 0, legRh: 0, legLk: 0, legRk: 0,
-    armLh: 0, armRh: 0, armLk: 0.15, armRk: 0.15,
-    yaw: 0, lean: 0, roll: 0, bob: 0, sink: 0, headPitch: 0, headYaw: 0
-  };
-  const T = Object.assign({}, rig);   // targets
-  function approach(dt) {
-    const k = Math.min(1, dt * 11);
-    for (const key in rig) rig[key] += (T[key] - rig[key]) * k;
-  }
+  const rig = { legLh:0, legRh:0, legLk:0, legRk:0, armLh:0, armRh:0, armLk:0.2, armRk:0.2,
+                yaw:0, lean:0, roll:0, bob:0, sink:0, headPitch:0, headYaw:0, chestYaw:0 };
+  const T = Object.assign({}, rig);
+  function approach(dt) { const k = Math.min(1, dt * 11); for (const key in rig) rig[key] += (T[key] - rig[key]) * k; }
   function paint() {
     legL.pivot.rotation.x = rig.legLh; legR.pivot.rotation.x = rig.legRh;
-    legL.knee.rotation.x  = rig.legLk; legR.knee.rotation.x  = rig.legRk;
+    legL.knee.rotation.x = rig.legLk; legR.knee.rotation.x = rig.legRk;
     armL.pivot.rotation.x = rig.armLh; armR.pivot.rotation.x = rig.armRh;
-    armL.knee.rotation.x  = rig.armLk; armR.knee.rotation.x  = rig.armRk;
-    armL.pivot.rotation.z = 0.12; armR.pivot.rotation.z = -0.12;
+    armL.knee.rotation.x = rig.armLk; armR.knee.rotation.x = rig.armRk;
+    armL.pivot.rotation.z = 0.16; armR.pivot.rotation.z = -0.16;
     char.rotation.y = rig.yaw; char.rotation.x = rig.lean; char.rotation.z = rig.roll;
     char.position.y = rig.bob - rig.sink;
     head.rotation.x = rig.headPitch; head.rotation.y = rig.headYaw;
-    chest.rotation.y = rig.chestYaw || 0;
+    chest.rotation.y = rig.chestYaw;
   }
-
-  /* set pose TARGETS from the movement state */
   function setTargets(state, tSec, faceDir) {
-    const view = faceDir * -0.62;            // 3/4 facing the walk direction
+    const view = faceDir * -0.6;
     if (state === 'walk') {
-      const cad = 9.2, s = Math.sin(tSec * cad);
-      T.legLh = s * 0.6; T.legRh = -s * 0.6;
-      T.legLk = Math.max(0.03, Math.sin(tSec * cad + Math.PI * 0.5)) * 0.75;
-      T.legRk = Math.max(0.03, Math.sin(tSec * cad - Math.PI * 0.5)) * 0.75;
-      T.armLh = -s * 0.55; T.armRh = s * 0.55; T.armLk = 0.35; T.armRk = 0.35;
-      T.bob = Math.abs(Math.sin(tSec * cad)) * 0.05; T.sink = 0;
-      T.yaw = view; T.lean = 0.06; T.roll = Math.sin(tSec * cad) * 0.03;
-      T.chestYaw = Math.sin(tSec * cad) * 0.12; T.headYaw = -T.chestYaw * 0.5; T.headPitch = 0;
+      const cad = 8.6, s = Math.sin(tSec * cad);
+      T.legLh = s * 0.62; T.legRh = -s * 0.62;
+      T.legLk = Math.max(0.04, Math.sin(tSec * cad + Math.PI * 0.5)) * 0.8;
+      T.legRk = Math.max(0.04, Math.sin(tSec * cad - Math.PI * 0.5)) * 0.8;
+      T.armLh = -s * 0.55; T.armRh = s * 0.55; T.armLk = 0.4; T.armRk = 0.4;
+      T.bob = Math.abs(Math.sin(tSec * cad)) * 0.06; T.sink = 0;
+      T.yaw = view; T.lean = 0.05; T.roll = Math.sin(tSec * cad) * 0.03;
+      T.chestYaw = Math.sin(tSec * cad) * 0.13; T.headYaw = -T.chestYaw * 0.5; T.headPitch = 0;
     } else if (state === 'climb' || state === 'drop') {
-      T.legLh = -0.75; T.legRh = -0.75; T.legLk = 1.15; T.legRk = 1.15;
+      T.legLh = -0.8; T.legRh = -0.8; T.legLk = 1.2; T.legRk = 1.2;
       T.armLh = -1.9; T.armRh = -1.9; T.armLk = 0.5; T.armRk = 0.5;
       T.bob = 0; T.sink = 0; T.yaw = view; T.lean = 0.16; T.roll = 0;
       T.chestYaw = 0; T.headYaw = 0; T.headPitch = -0.12;
     } else if (state === 'sit') {
       const s = Math.sin(tSec * 1.6);
-      T.legLh = -1.5; T.legRh = -1.5; T.legLk = 1.7; T.legRk = 1.7;   // seated, knees up
-      T.armLh = -0.55; T.armRh = -0.55; T.armLk = 0.95; T.armRk = 0.95; // hands on knees
-      T.bob = 0; T.sink = 0.34; T.yaw = 0.18 * s; T.lean = 0.05; T.roll = s * 0.03;
-      T.chestYaw = 0; T.headYaw = 0.14 * s; T.headPitch = 0.04;
+      T.legLh = -1.5; T.legRh = -1.5; T.legLk = 1.75; T.legRk = 1.75;
+      T.armLh = -0.5; T.armRh = -0.5; T.armLk = 0.95; T.armRk = 0.95;
+      T.bob = 0; T.sink = 0.36; T.yaw = 0.18 * s; T.lean = 0.05; T.roll = s * 0.03;
+      T.chestYaw = 0; T.headYaw = 0.14 * s; T.headPitch = 0.05;
     } else if (state === 'fallen') {
       T.legLh = 0.35; T.legRh = -0.2; T.legLk = 0.4; T.legRk = 0.6;
-      T.armLh = 0.8; T.armRh = -0.6; T.armLk = 0.3; T.armRk = 0.3;
-      T.bob = 0; T.sink = 0.42; T.yaw = 0; T.lean = 0; T.roll = faceDir * 1.5;
+      T.armLh = 0.9; T.armRh = -0.7; T.armLk = 0.3; T.armRk = 0.3;
+      T.bob = 0; T.sink = 0.5; T.yaw = 0; T.lean = 0; T.roll = faceDir * 1.5;
       T.chestYaw = 0; T.headYaw = 0; T.headPitch = 0;
     } else { // idle
       const s = Math.sin(tSec * 1.9), s2 = Math.sin(tSec * 0.6);
       T.legLh = 0.02; T.legRh = -0.02; T.legLk = 0.05; T.legRk = 0.05;
-      T.armLh = s * 0.06; T.armRh = -s * 0.06; T.armLk = 0.2; T.armRk = 0.2;
-      T.bob = s * 0.012; T.sink = 0; T.yaw = s2 * 0.25; T.lean = 0.02; T.roll = 0;
-      T.chestYaw = 0; T.headYaw = s2 * 0.35; T.headPitch = 0.02;
+      T.armLh = s * 0.07; T.armRh = -s * 0.07; T.armLk = 0.22; T.armRk = 0.22;
+      T.bob = s * 0.015; T.sink = 0; T.yaw = s2 * 0.28; T.lean = 0.02; T.roll = 0;
+      T.chestYaw = 0; T.headYaw = s2 * 0.4; T.headPitch = 0.03;
     }
   }
 
@@ -2544,7 +2571,7 @@ document.getElementById('flip-card').addEventListener('click', function () {
     "Gold nanoparticles are basically tiny <b>antennas</b>. Neat, right?",
     "Built in Austria, tuned in Zürich, running in <b>New York</b>. 🗽",
     "Off to explore the page… don't mind me. 🚶",
-    "I'd wave, but I'm rendered in 3D — no free hands."
+    "Careful, this word looks climbable. 🧗"
   ];
   const perchLines = [
     "Nice view from up here! 🧗", "This word looks comfy. Mine now. 😌",
@@ -2644,22 +2671,18 @@ document.getElementById('flip-card').addEventListener('click', function () {
       if (now >= idleUntil) decide();
     }
 
-    // pose + render the 3D character
     setTargets(state, now / 1000, faceDir);
     approach(dt); paint();
     renderer.render(scene, cam);
-
     raf = requestAnimationFrame(frame);
   }
 
-  /* click → topple. #walker has pointer-events:none (never blocks the page);
-     we hit-test the click against the character's on-screen box instead. */
   document.addEventListener('click', (e) => {
     if (!walker.classList.contains('show') || state === 'fallen') return;
     const r = walker.getBoundingClientRect();
     const cx = r.left + r.width / 2;
     if (e.clientX < cx - 42 || e.clientX > cx + 42 || e.clientY < r.top + 20 || e.clientY > r.bottom) return;
-    const prev = state; state = 'fallen'; y = 0; apply();
+    state = 'fallen'; y = 0; apply();
     say(complaints[Math.floor(Math.random() * complaints.length)]);
     setTimeout(() => { say("Okay, back up! 💪"); startIdle(500); }, 3000);
   }, true);
