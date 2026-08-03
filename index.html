@@ -1046,8 +1046,10 @@ footer p b { color: var(--accent); font-weight: 400; }
 }
 #walker.show { display: block; }
 #walker-canvas {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
+  /* Wider than the walker box so the lying-down pose isn't clipped;
+     kept centered via the negative left offset. */
+  position: absolute; bottom: 0; left: -48px;
+  width: 160px; height: 100px;
   display: block; pointer-events: none;
 }
 #walker .walker-char {
@@ -1361,7 +1363,6 @@ footer p b { color: var(--accent); font-weight: 400; }
               <div class="flip-face back">
                 <img id="twin-img" src="Images/twins/twin_mountains.jpg" alt="AI avatar of David Gabriel Schauer" />
                 <div class="face-tag">
-                  <strong class="ai-label">David.ai</strong>
                   <span id="twin-label">Digital Twin</span>
                 </div>
               </div>
@@ -2163,7 +2164,7 @@ navToggle.addEventListener('click', () => {
   let bag = [], last = -1;
   function show(i) {
     img.src = DIRS[style] + TWINS[i][0];
-    label.textContent = TWINS[i][1] + (style === 'sketch' ? ' · Sketch' : '');
+    label.textContent = TWINS[i][1];
   }
   function nextTwin() {
     if (!bag.length) {
@@ -2325,6 +2326,7 @@ navToggle.addEventListener('click', () => {
 
 <!-- ═══ 3D TOOL ANIMATIONS (three.js) ═══ -->
 <script src="vendor/three.min.js"></script>
+<script src="mascot_lines.js"></script>
 <script>
 (function () {
   if (!window.THREE) return;
@@ -2494,7 +2496,7 @@ navToggle.addEventListener('click', () => {
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(2.5, window.devicePixelRatio || 1.5));
   if (renderer.outputEncoding !== undefined && THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
-  const CW = 64, CH = 96;                        // half-size mascot
+  const CW = 160, CH = 100;                      // wide canvas so the fallen (lying) pose fits fully
   renderer.setSize(CW, CH, false);
 
   const scene = new THREE.Scene();
@@ -2668,22 +2670,13 @@ navToggle.addEventListener('click', () => {
     }
   }
 
-  /* ─────────────── movement state machine ─────────────── */
-  const lines = [
-    "Hi — I'm David's <b>AI twin</b>. Ask the real one about plasmonics.",
-    "The <b>HELIX</b>, <b>OWL</b> and <b>SCAFFOLD</b> tabs run live in your browser. 🔬",
-    "Fun fact: I analyse <b>11,160</b> crystal images a night.",
-    "Grab his <b>CV</b> up top — it's worth a read. 📄",
-    "Gold nanoparticles are basically tiny <b>antennas</b>. Neat, right?",
-    "Built in Austria, tuned in Zürich, running in <b>New York</b>. 🗽",
-    "Off to explore the page… don't mind me. 🚶",
-    "Careful, this word looks climbable. 🧗"
-  ];
-  const perchLines = [
-    "Nice view from up here! 🧗", "This word looks comfy. Mine now. 😌",
-    "Just gonna sit here a sec…", "Best seat in the lab. 🔭", "Perched. Carry on."
-  ];
-  const complaints = ["Ouch! Hey! 😵", "Rude! I'm walking here! 🌀", "I'll allow it… once. 😤", "Toppled, not defeated! 💫"];
+  /* ─────────────── movement state machine ───────────────
+     Speech lines live in mascot_lines.js (repo root) — edit that file, not this one. */
+  const LN = window.MASCOT_LINES || {};
+  const lines      = (LN.idle    && LN.idle.length)    ? LN.idle    : ["Hi — I'm David's <b>AI twin</b>! 👋"];
+  const perchLines = (LN.perch   && LN.perch.length)   ? LN.perch   : ["Nice view from up here! 🧗"];
+  const complaints = (LN.fall    && LN.fall.length)    ? LN.fall    : ["Ouch! Hey! 😵"];
+  const recoverLines = (LN.recover && LN.recover.length) ? LN.recover : ["Okay, back up! 💪"];
 
   const CHAR_W = 64;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -2790,7 +2783,7 @@ navToggle.addEventListener('click', () => {
     if (e.clientX < cx - 24 || e.clientX > cx + 24 || e.clientY < r.top + 8 || e.clientY > r.bottom) return;
     state = 'fallen'; y = 0; apply();
     say(complaints[Math.floor(Math.random() * complaints.length)]);
-    setTimeout(() => { say("Okay, back up! 💪"); startIdle(500); }, 3000);
+    setTimeout(() => { say(recoverLines[Math.floor(Math.random() * recoverLines.length)]); startIdle(500); }, 3000);
   }, true);
 
   window.addEventListener('resize', () => {
