@@ -425,6 +425,25 @@ h1.name .grad {
 }
 .flip-hint svg { width: 12px; height: 12px; color: var(--accent); }
 
+/* ─── Twin style toggle (color ⇄ sketch) ─── */
+.twin-style-toggle {
+  margin-top: 0.65rem;
+  display: inline-flex; gap: 0;
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  border-radius: 999px; overflow: hidden;
+  background: rgba(10, 15, 18, 0.6);
+}
+.tsbtn {
+  appearance: none; border: 0; cursor: pointer;
+  background: transparent; color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.56rem; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 0.34rem 0.85rem;
+  transition: background 0.25s, color 0.25s;
+}
+.tsbtn:hover { color: var(--ink-mid); }
+.tsbtn.active { background: rgba(52, 211, 153, 0.16); color: var(--accent); }
+
 /* ─── Affiliation ticker ─── */
 .affil-strip {
   border-top: 1px solid var(--line);
@@ -1352,6 +1371,10 @@ footer p b { color: var(--accent); font-weight: 400; }
             <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
             <span class="hint-desktop">Hover</span><span class="hint-mobile">Tap</span> — meet my AI twin · tap again to flip back
           </p>
+          <div class="twin-style-toggle" id="twin-style-toggle" role="group" aria-label="AI twin style">
+            <button type="button" class="tsbtn active" data-style="color">Color</button>
+            <button type="button" class="tsbtn" data-style="sketch">Sketch</button>
+          </div>
         </div>
       </section>
     </div>
@@ -2110,28 +2133,38 @@ navToggle.addEventListener('click', () => {
   navToggle.setAttribute('aria-expanded', String(open));
 });
 
-/* ═══ FLIP CARD (tap support for touch devices) + RANDOM AI TWIN ═══ */
-/* Every flip reveals a different AI twin, in a shuffled order that only
-   repeats after all 10 have been shown (and never the same one twice in a row). */
+/* ═══ FLIP CARD (tap support) + RANDOM AI TWIN + COLOR/SKETCH TOGGLE ═══ */
+/* Every flip reveals a different AI twin (shuffled, no back-to-back repeats,
+   all 10 shown before reshuffle). The toggle switches between the color
+   cartoon set (Images/twins/) and the pencil-sketch set (Images/twins_sketch/). */
 (function () {
   const TWINS = [
-    ['Images/twins/twin_mountains.jpg', 'Digital Twin · Alpine'],
-    ['Images/twins/twin_scientist.jpg', 'Digital Twin · Scientist'],
-    ['Images/twins/twin_skier.jpg',     'Digital Twin · Skier'],
-    ['Images/twins/twin_hockey.jpg',    'Digital Twin · Hockey'],
-    ['Images/twins/twin_suit.jpg',      'Digital Twin · Business'],
-    ['Images/twins/twin_rotary.jpg',    'Digital Twin · Rotary'],
-    ['Images/twins/twin_malaika.jpg',   'Digital Twin · Malaika Kitchens'],
-    ['Images/twins/twin_presenter.jpg', 'Digital Twin · Speaker'],
-    ['Images/twins/twin_coder.jpg',     'Digital Twin · HELIX Coder'],
-    ['Images/twins/twin_darklab.jpg',   'Digital Twin · Night Lab'],
+    ['twin_mountains.jpg', 'Digital Twin · Alpine'],
+    ['twin_scientist.jpg', 'Digital Twin · Scientist'],
+    ['twin_skier.jpg',     'Digital Twin · Skier'],
+    ['twin_hockey.jpg',    'Digital Twin · Hockey'],
+    ['twin_suit.jpg',      'Digital Twin · Business'],
+    ['twin_rotary.jpg',    'Digital Twin · Rotary'],
+    ['twin_malaika.jpg',   'Digital Twin · Malaika Kitchens'],
+    ['twin_presenter.jpg', 'Digital Twin · Speaker'],
+    ['twin_coder.jpg',     'Digital Twin · HELIX Coder'],
+    ['twin_darklab.jpg',   'Digital Twin · Night Lab'],
   ];
+  const DIRS = { color: 'Images/twins/', sketch: 'Images/twins_sketch/' };
   const img = document.getElementById('twin-img');
   const label = document.getElementById('twin-label');
   const card = document.getElementById('flip-card');
   const scene = document.getElementById('flip-scene');
+  const toggle = document.getElementById('twin-style-toggle');
+
+  let style = 'color';
+  try { if (localStorage.getItem('twinStyle') === 'sketch') style = 'sketch'; } catch (e) {}
 
   let bag = [], last = -1;
+  function show(i) {
+    img.src = DIRS[style] + TWINS[i][0];
+    label.textContent = TWINS[i][1] + (style === 'sketch' ? ' · Sketch' : '');
+  }
   function nextTwin() {
     if (!bag.length) {
       bag = TWINS.map((_, i) => i);
@@ -2144,10 +2177,29 @@ navToggle.addEventListener('click', () => {
       }
     }
     last = bag.pop();
-    img.src = TWINS[last][0];
-    label.textContent = TWINS[last][1];
+    show(last);
   }
   nextTwin();                                              // random twin on page load
+
+  /* Toggle buttons: switch style, re-render current twin in the new style */
+  const preloaded = { color: false, sketch: false };
+  function preload(s) {
+    if (preloaded[s]) return;
+    preloaded[s] = true;
+    TWINS.forEach(t => { new Image().src = DIRS[s] + t[0]; });
+  }
+  toggle.querySelectorAll('.tsbtn').forEach(btn => {
+    if (btn.dataset.style === style) btn.classList.add('active');
+    else if (btn.classList.contains('active') && btn.dataset.style !== style) btn.classList.remove('active');
+    btn.addEventListener('click', () => {
+      if (btn.dataset.style === style) return;
+      style = btn.dataset.style;
+      toggle.querySelectorAll('.tsbtn').forEach(b => b.classList.toggle('active', b === btn));
+      try { localStorage.setItem('twinStyle', style); } catch (e) {}
+      preload(style);
+      show(last);                                          // same twin, new style
+    });
+  });
 
   /* Desktop: swap just before the hover-flip reveals the back face */
   scene.addEventListener('mouseenter', () => {
@@ -2159,8 +2211,8 @@ navToggle.addEventListener('click', () => {
     this.classList.toggle('flipped');
   });
 
-  /* Preload all twins after load so hovers are instant */
-  window.addEventListener('load', () => TWINS.forEach(t => { new Image().src = t[0]; }));
+  /* Preload current set after load; other set on first toggle */
+  window.addEventListener('load', () => preload(style));
 })();
 
 /* Tool tabs are open (no password gate). */
