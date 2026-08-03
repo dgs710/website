@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 264.13 121.86">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        stroke: #a98c4e;
+        stroke-width: 2.51px;
+      }
+
+      .st0, .st1, .st2, .st3, .st4, .st5, .st6, .st7, .st8 {
+        fill: none;
+      }
+
+      .st9 {
+        fill: #d52b1e;
+      }
+
+      .st10 {
+        fill: #a98c4e;
+      }
+
+      .st1 {
+        stroke: #be7a7e;
+      }
+
+      .st1, .st2, .st3, .st4, .st5, .st6, .st7, .st8 {
+        stroke-linecap: round;
+      }
+
+      .st1, .st2, .st4, .st5, .st6, .st11, .st7 {
+        isolation: isolate;
+      }
+
+      .st1, .st2, .st4, .st5, .st6, .st7 {
+        opacity: .85;
+        stroke-width: 2.4px;
+      }
+
+      .st12 {
+        fill: #c69214;
+      }
+
+      .st2 {
+        stroke: #cdc6c0;
+      }
+
+      .st3 {
+        stroke: #fff;
+        stroke-width: 1.8px;
+      }
+
+      .st13 {
+        fill: #fff;
+      }
+
+      .st4 {
+        stroke: #2e4a78;
+      }
+
+      .st5 {
+        stroke: #9c3a3f;
+      }
+
+      .st6 {
+        stroke: #8fa0b8;
+      }
+
+      .st11 {
+        fill: #0f1830;
+        font-family: Georgia-Bold, Georgia;
+        font-size: 106px;
+        font-weight: 700;
+      }
+
+      .st7 {
+        stroke: #51739e;
+      }
+
+      .st8 {
+        stroke: #b23a46;
+        stroke-width: 5px;
+      }
+    </style>
+  </defs>
+  <line class="st5" x1="26.07" y1="107.16" x2="250.26" y2="49.56"/>
+  <line class="st1" x1="26.07" y1="107.16" x2="251.86" y2="61.05"/>
+  <line class="st2" x1="26.07" y1="107.16" x2="253.47" y2="72.54"/>
+  <line class="st6" x1="26.07" y1="107.16" x2="255.08" y2="84.02"/>
+  <line class="st7" x1="26.07" y1="107.16" x2="256.68" y2="95.51"/>
+  <line class="st4" x1="26.07" y1="107.16" x2="258.29" y2="107"/>
+  <g>
+    <path class="st8" d="M6.62,88.18c-3.39,8.78,3.86,16.92,16.77,18.86"/>
+    <path class="st3" d="M6.62,88.18c-3.39,8.78,3.86,16.92,16.77,18.86"/>
+  </g>
+  <polygon class="st12" points="257.39 100.56 259.57 104.59 264.13 104.15 260.98 107.47 262.8 111.68 258.67 109.7 255.23 112.74 255.83 108.19 251.89 105.87 256.4 105.03 257.39 100.56"/>
+  <g>
+    <circle class="st13" cx="25.2" cy="106.82" r="4.37"/>
+    <g>
+      <g>
+        <rect class="st9" x="24.07" y="102.94" width="2.27" height="7.76" rx=".32" ry=".32"/>
+        <rect class="st9" x="21.32" y="105.69" width="7.76" height="2.27" rx=".32" ry=".32"/>
+      </g>
+      <g>
+        <rect class="st10" x="24.21" y="98.74" width="1.97" height="3.02" rx=".63" ry=".63"/>
+        <rect class="st10" x="26.97" y="100.14" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-73.34 75.23) rotate(-60)"/>
+        <rect class="st10" x="29.38" y="102.55" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-47.63 29.32) rotate(-30)"/>
+        <rect class="st10" x="30.26" y="105.84" width="3.02" height="1.97" rx=".63" ry=".63"/>
+        <rect class="st10" x="29.91" y="108.6" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-79.91 81.81) rotate(-60)"/>
+        <rect class="st10" x="27.5" y="111.01" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-52.44 29.32) rotate(-30)"/>
+        <rect class="st10" x="24.21" y="111.89" width="1.97" height="3.02" rx=".63" ry=".63"/>
+        <rect class="st10" x="20.4" y="111.53" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-86.49 75.23) rotate(-60)"/>
+        <rect class="st10" x="17.99" y="109.13" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-52.44 24.5) rotate(-30)"/>
+        <rect class="st10" x="17.11" y="105.84" width="3.02" height="1.97" rx=".63" ry=".63"/>
+        <rect class="st10" x="18.52" y="102.02" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-79.91 68.66) rotate(-60)"/>
+        <rect class="st10" x="20.93" y="99.62" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-47.63 24.5) rotate(-30)"/>
+        <circle class="st0" cx="25.2" cy="106.82" r="4.72"/>
+      </g>
+    </g>
+  </g>
+  <text class="st11" transform="translate(0 89.72)"><tspan x="0" y="0">DGS</tspan></text>
+</svg>

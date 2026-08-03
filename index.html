@@ -349,6 +349,11 @@ h1.name .grad {
 }
 .contact-row a svg { width: 11px; height: 11px; }
 .contact-row a:hover { color: var(--accent-2); }
+.contact-row a.mail-main { color: var(--accent); }
+.contact-row a.mail-main:hover { color: var(--accent-2); }
+.contact-institutional { margin-top: 0.35rem; }
+.mail-logo { height: 17px; width: auto; opacity: 0.9; display: inline-block; }
+.mail-logo-round { height: 19px; }
 
 /* ─── Flip card (photo ⇄ AI avatar) ─── */
 .hero-visual {
@@ -425,6 +430,35 @@ h1.name .grad {
 }
 .flip-hint svg { width: 12px; height: 12px; color: var(--accent); }
 
+/* ─── DGS logo badge above the flip card ─── */
+.dgs-logo-wrap {
+  background: #eef1f4;
+  border-radius: 12px;
+  padding: 8px 16px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+  display: inline-block;
+}
+.dgs-logo-wrap img { width: 168px; height: auto; display: block; }
+@media (max-width: 820px) { .dgs-logo-wrap img { width: 130px; } }
+
+/* ─── Mascot on/off switch (fixed, bottom-right) ─── */
+#mascot-switch {
+  position: fixed; right: 12px; bottom: 10px; z-index: 41;
+  appearance: none; cursor: pointer;
+  border: 1px solid rgba(52, 211, 153, 0.28);
+  border-radius: 999px;
+  background: rgba(10, 15, 18, 0.75);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.54rem; letter-spacing: 0.18em;
+  padding: 0.32rem 0.7rem;
+  transition: color 0.25s, border-color 0.25s, opacity 0.25s;
+  opacity: 0.75;
+}
+#mascot-switch:hover { opacity: 1; }
+#mascot-switch.off { color: var(--ink-muted); border-color: var(--line); }
+
 /* ─── Twin style toggle (color ⇄ sketch) ─── */
 .twin-style-toggle {
   margin-top: 0.65rem;
@@ -481,17 +515,38 @@ h1.name .grad {
   padding: clamp(1.6rem, 3.5vh, 2.6rem) 0;
 }
 .stat {
+  perspective: 700px;
+  min-height: 108px;
+}
+.stat-inner {
+  position: relative; width: 100%; height: 100%; min-height: 108px;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.22,1,0.36,1);
+}
+.stat:hover .stat-inner, .stat.flipped .stat-inner { transform: rotateY(180deg); }
+.stat-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
   padding: 1.2rem 1.3rem;
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  display: flex; flex-direction: column; justify-content: center;
 }
-.stat:hover {
+.stat-back {
+  transform: rotateY(180deg);
   border-color: var(--line-acc);
-  transform: translateY(-3px);
-  box-shadow: 0 14px 40px rgba(0,0,0,0.4), 0 0 24px rgba(52,211,153,0.07);
+  box-shadow: 0 0 24px rgba(52,211,153,0.07);
+  gap: 0.28rem;
 }
+.stat-back em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-mid);
+}
+.stat-back.stat-flags { flex-direction: row; justify-content: center; align-items: center; gap: 1rem; }
+.stat-back.stat-flags em { font-size: 1.6rem; }
 .stat b {
   font-family: var(--font-head);
   font-size: clamp(1.5rem, 3vw, 2.1rem);
@@ -630,6 +685,8 @@ h1.name .grad {
   font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--accent);
 }
+.sc-card h3 a { color: inherit; text-decoration: none; border-bottom: 1px dotted rgba(110,231,183,0.4); }
+.sc-card h3 a:hover { color: var(--accent-2); }
 .sc-card h3 {
   font-family: var(--font-head);
   font-size: 1.12rem; font-weight: 600;
@@ -1252,7 +1309,7 @@ footer p b { color: var(--accent); font-weight: 400; }
       <li><a href="#" class="tab-helix" data-panel="scaffold">SCAFFOLD <span class="owl-emoji">🧊</span></a></li>
     </ul>
     <div class="ribbon-right">
-      <a href="mailto:dgs2153@columbia.edu" class="pill">
+      <a href="mailto:david@dgschauer.com" class="pill">
         <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
         Contact
       </a>
@@ -1302,7 +1359,7 @@ footer p b { color: var(--accent); font-weight: 400; }
             <span class="chip g">Columbia · Gang Lab</span>
             <span class="chip g">ETH Zurich · ATTO</span>
             <span class="chip g">Brown · Klein Lab</span>
-            <span class="chip g">Brookhaven · 3-ID HXN</span>
+            <span class="chip g">Brookhaven · CFN</span>
             <span class="chip">Plasmonics</span>
             <span class="chip">X-ray Spectroscopy</span>
             <span class="chip">Nanoparticles</span>
@@ -1315,35 +1372,50 @@ footer p b { color: var(--accent); font-weight: 400; }
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 10v6m0 0-3-3m3 3 3-3M3 17V7a2 2 0 0 1 2-2h6l2 2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
                 Download CV
               </a>
-              <a href="https://www.linkedin.com/" target="_blank" class="pill">
+              <a href="https://www.linkedin.com/in/david-schauer/" target="_blank" class="pill">
                 <svg fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                 LinkedIn
               </a>
-              <a href="https://scholar.google.com/" target="_blank" class="pill">
+              <a href="https://scholar.google.com/citations?user=nkcTJskAAAAJ" target="_blank" class="pill">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 0 0-.491 6.347A48.627 48.627 0 0 1 12 20.904a48.627 48.627 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.57 50.57 0 0 0-2.658-.813A59.905 59.905 0 0 1 12 3.493a59.902 59.902 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443"/></svg>
                 Scholar
               </a>
-              <a href="https://orcid.org/" target="_blank" class="pill">
+              <a href="https://orcid.org/0000-0002-0136-184X" target="_blank" class="pill">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3"/></svg>
                 ORCID
               </a>
-              <a href="https://www.researchgate.net/" target="_blank" class="pill">
+              <a href="https://www.researchgate.net/profile/David-Schauer-6" target="_blank" class="pill">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3z"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z"/></svg>
                 ResearchGate
               </a>
             </div>
             <div class="contact-row">
-              <a href="mailto:dgs2153@columbia.edu">
+              <a href="mailto:david@dgschauer.com" class="mail-main">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
-                dgs2153@columbia.edu
+                david@dgschauer.com
               </a>
-              <a href="mailto:dschauer@ethz.ch">
+              <a href="mailto:schauerdavid07@gmail.com">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
-                dschauer@ethz.ch
+                schauerdavid07@gmail.com
               </a>
               <a href="tel:+19176968125">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 6.75z"/></svg>
                 +1 (917) 696-8125
+              </a>
+              <a href="tel:+41766077321">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 6.75z"/></svg>
+                +41 76 607 73 21
+              </a>
+            </div>
+            <div class="contact-row contact-institutional">
+              <a href="mailto:dgs2153@columbia.edu">
+                <img src="Images/logos/columbia_cheme.png" alt="Columbia Chemical Engineering" class="mail-logo" />
+                dgs2153@columbia.edu
+              </a>
+              <a href="mailto:dschauer@bnl.gov">
+                <img src="Images/logos/bnl.png" alt="Brookhaven National Laboratory" class="mail-logo" />
+                <img src="Images/logos/doe.png" alt="U.S. Department of Energy" class="mail-logo mail-logo-round" />
+                dschauer@bnl.gov
               </a>
             </div>
           </div>
@@ -1351,6 +1423,9 @@ footer p b { color: var(--accent); font-weight: 400; }
 
         <!-- Flip card: real photo ⇄ AI twin -->
         <div class="hero-visual">
+          <div class="dgs-logo-wrap reveal">
+            <img src="Images/logos/dgs_logo.svg" alt="DGS logo" />
+          </div>
           <div class="flip-scene" id="flip-scene">
             <div class="flip-card" id="flip-card">
               <div class="flip-face front">
@@ -1395,10 +1470,30 @@ footer p b { color: var(--accent); font-weight: 400; }
 
     <div class="wrap">
       <section class="stats-band">
-        <div class="stat"><b data-count="3">0</b><span>Peer-Reviewed Publications</span></div>
-        <div class="stat"><b data-count="4">0</b><span>Research Institutions</span></div>
-        <div class="stat"><b data-count="2">0</b><span>DOE Beamline Proposals · PI &amp; Co-PI</span></div>
-        <div class="stat"><b data-count="3">0</b><span>Countries · AT → CH → US</span></div>
+        <div class="stat">
+          <div class="stat-inner">
+            <div class="stat-face stat-front"><b data-count="3">0</b><span>Peer-Reviewed Publications</span></div>
+            <div class="stat-face stat-back"><em>PCCP · RSC</em><em>Nanoscale · RSC</em><em>PCIM Nuremberg</em></div>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-inner">
+            <div class="stat-face stat-front"><b data-count="4">0</b><span>Research Institutions</span></div>
+            <div class="stat-face stat-back"><em>Columbia</em><em>ETH Zürich</em><em>Brown</em><em>Brookhaven</em></div>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-inner">
+            <div class="stat-face stat-front"><b data-count="4">0</b><span>Research Tools Built</span></div>
+            <div class="stat-face stat-back"><em>HELIX 🧬</em><em>OWL 🦉</em><em>SCAFFOLD 🧊</em><em>MOSAXS 🩻</em></div>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-inner">
+            <div class="stat-face stat-front"><b data-count="3">0</b><span>Countries · AT → CH → US</span></div>
+            <div class="stat-face stat-back stat-flags"><em>🇦🇹</em><em>🇨🇭</em><em>🇺🇸</em></div>
+          </div>
+        </div>
       </section>
     </div>
   </div>
@@ -1422,64 +1517,67 @@ footer p b { color: var(--accent); font-weight: 400; }
 
         <div class="sc-card reveal">
           <span class="sc-num">Current · Sep 2025 — present</span>
-          <h3>Columbia University · Gang Lab</h3>
+          <h3><a href="https://gang.cheme.columbia.edu" target="_blank" rel="noopener">Columbia University · Gang Lab</a></h3>
           <p>
-            Fully funded MS/PhD candidate in <strong>Chemical Engineering</strong>
-            at the Fu Foundation School of Engineering &amp; Applied Science.
-            Joining Prof. Oleg Gang's group on programmable nanomaterial assembly.
+            <strong>Fully-Funded PhD Student</strong>, Gang Lab, Department of
+            Chemical Engineering, Fu Foundation School of Engineering and
+            Applied Science, Columbia University in the City of New York.
+            Programmable nanomaterial assembly with Prof. Oleg Gang.
           </p>
-          <span class="sc-tag g">PhD Student</span>
+          <span class="sc-tag g">Fully-Funded PhD Student</span>
         </div>
 
         <div class="sc-card reveal">
-          <span class="sc-num">Sep 2022 — Sep 2025</span>
-          <h3>ETH Zurich · ATTO Group, LPC</h3>
+          <span class="sc-num">Sep 2022 — present</span>
+          <h3><a href="https://atto.ethz.ch" target="_blank" rel="noopener">ETH Zurich · ATTO Lab, LPC</a></h3>
           <p>
-            Scientific staff in Prof. Hans Jakob Wörner's lab (D-CHAB).
-            Led wet-chemistry laboratory; developed <strong>pH-driven
-            seed-mediated synthesis</strong> for precise tuning of plasmon
-            response in gold nanoparticles, paired with optical and X-ray
-            spectroscopy.
+            <strong>Honorary PhD Student</strong>, ATTO Lab, Laboratory of
+            Physical Chemistry, Department of Chemistry and Applied Biosciences,
+            Swiss Federal Institute of Technology (ETH) Zürich. Scientific staff
+            2022–2025 in Prof. Hans Jakob Wörner's lab: led the wet-chemistry
+            laboratory; developed <strong>pH-driven seed-mediated synthesis</strong>
+            for precise tuning of plasmon response in gold nanoparticles.
           </p>
-          <span class="sc-tag g">Scientific Staff</span>
+          <span class="sc-tag g">Honorary PhD Student</span>
         </div>
 
         <div class="sc-card reveal">
-          <span class="sc-num">Sep 2024 — Apr 2025</span>
+          <span class="sc-num">Former · Sep 2024 — Apr 2025</span>
           <h3>Hitachi Energy · CERC</h3>
           <p>
-            R&amp;D internship at the Central European Research Center,
+            <strong>Intern, Semiconductor power-module packaging and reliability
+            engineering</strong>, Central European Research Center,
             Baden-Dättwil. Reliability testing of encapsulated power modules
             for <strong>SiC-MOSFET semiconductors</strong> using scanning
             acoustic microscopy, surface profilometry, and accelerated stress
             testing.
           </p>
-          <span class="sc-tag">Industry R&amp;D</span>
+          <span class="sc-tag">R&amp;D Intern</span>
         </div>
 
         <div class="sc-card reveal">
-          <span class="sc-num">Sep 2023 — Jun 2024</span>
-          <h3>Brown University · Klein Lab</h3>
+          <span class="sc-num">Former · Sep 2023 — Jun 2024</span>
+          <h3><a href="https://www.kleinlaserlab.org" target="_blank" rel="noopener">Brown University · Klein Lab</a></h3>
           <p>
-            Visiting Scholar in the Department of Chemistry. Helped build out
-            the chemistry &amp; spectroscopy laboratory with Prof. Emily
-            Sprague-Klein; plasmonic nanoparticle synthesis and surface-sensitive
-            spectroscopy.
+            <strong>Visiting Scholar</strong>, Klein Lab, Department of
+            Chemistry, Brown University. Helped build out the chemistry &amp;
+            spectroscopy laboratory with Prof. Emily Sprague-Klein; plasmonic
+            nanoparticle synthesis and surface-sensitive spectroscopy.
           </p>
-          <span class="sc-tag">SEMP Exchange</span>
+          <span class="sc-tag">Visiting Scholar</span>
         </div>
 
         <div class="sc-card reveal">
-          <span class="sc-num">Sep 2023 — Sep 2024</span>
-          <h3>Brookhaven National Lab · 3-ID HXN</h3>
+          <span class="sc-num">Current</span>
+          <h3><a href="https://www.bnl.gov/cfn/research/softbio.php" target="_blank" rel="noopener">Brookhaven National Lab · CFN Soft &amp; Bio Nanomaterials</a></h3>
           <p>
-            Guest User at NSLS-II, hard X-ray nanoprobe beamline.
-            <strong>PI</strong> on XAS of surface plasmon resonance in gold
-            nanoparticles (Au L<sub>3</sub>-edge 2D-XANES);
-            <strong>Co-PI</strong> on Cu K-edge XANES of copper-carbon
-            ultraconductors under in-situ He / vacuum conditions.
+            <strong>Guest Junior Research Associate</strong>, Soft and Bio
+            Nanomaterials Group, Center for Functional Nanomaterials (CFN),
+            Brookhaven National Laboratory (BNL), U.S. Department of Energy
+            (DOE). Self-assembled DNA-origami nanomaterials and their
+            structural characterization.
           </p>
-          <span class="sc-tag g">DOE Beamline</span>
+          <span class="sc-tag g">Guest Junior Research Associate</span>
         </div>
 
         <div class="sc-card reveal">
@@ -2072,6 +2170,7 @@ footer p b { color: var(--accent); font-weight: 400; }
   <canvas id="walker-canvas"></canvas>
   <div class="walker-shadow"></div>
 </div>
+<button id="mascot-switch" aria-label="Toggle the walking 3D twin" title="Toggle the walking 3D twin">3D TWIN: ON</button>
 
 <script>
 /* ═══ INTRO SPLASH ═══ */
@@ -2215,6 +2314,13 @@ navToggle.addEventListener('click', () => {
   /* Preload current set after load; other set on first toggle */
   window.addEventListener('load', () => preload(style));
 })();
+
+/* Stats band: tap to flip on touch devices */
+document.querySelectorAll('.stat').forEach((el) => {
+  el.addEventListener('click', () => {
+    if (!window.matchMedia('(hover: hover)').matches) el.classList.toggle('flipped');
+  });
+});
 
 /* Tool tabs are open (no password gate). */
 
@@ -2720,12 +2826,43 @@ navToggle.addEventListener('click', () => {
     startIdle(1600); scheduleChatter();
     raf = requestAnimationFrame(frame);
   }
+  /* ── ON/OFF switch: fully deactivates / reactivates the walking twin ── */
+  const mswitch = document.getElementById('mascot-switch');
+  let mascotOn = true, started = false, introPassed = false;
+  try { mascotOn = localStorage.getItem('mascotOn') !== '0'; } catch (e) {}
+
+  function renderSwitch() {
+    mswitch.textContent = '3D TWIN: ' + (mascotOn ? 'ON' : 'OFF');
+    mswitch.classList.toggle('off', !mascotOn);
+  }
+  function activate() {
+    if (!mascotOn || !introPassed) return;
+    if (!started) { if (modelReady) { started = true; start(); } else { onReady.push(() => { if (mascotOn && !started) { started = true; start(); } }); } return; }
+    walker.classList.add('show');
+    scheduleChatter();
+    if (!reduced && !raf) { lastT = 0; raf = requestAnimationFrame(frame); }
+  }
+  function deactivate() {
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    clearTimeout(scheduleChatter._t);
+    clearTimeout(bubble._t);
+    bubble.classList.remove('show');
+    walker.classList.remove('show');
+  }
+  mswitch.addEventListener('click', () => {
+    mascotOn = !mascotOn;
+    try { localStorage.setItem('mascotOn', mascotOn ? '1' : '0'); } catch (e) {}
+    renderSwitch();
+    if (mascotOn) activate(); else deactivate();
+  });
+  renderSwitch();
+
   /* appear once the intro has passed AND the 3D model has loaded */
-  setTimeout(() => { if (modelReady) start(); else onReady.push(start); }, 4200);
+  setTimeout(() => { introPassed = true; activate(); }, 4200);
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
-    else if (!reduced && !raf) { lastT = 0; raf = requestAnimationFrame(frame); }
+    else if (!reduced && !raf && mascotOn && started) { lastT = 0; raf = requestAnimationFrame(frame); }
   });
 })();
 </script>
