@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- dgschauer.com — website v9 · HELIX + OWL + SCAFFOLD tools live (no password gate) · 3D tool animations -->
+<!-- dgschauer.com — website v10 · colored tab icons · acronym meanings · wandering climbing mascot -->
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -520,6 +520,40 @@ h1.name .grad {
   .ph-head { gap: 1rem; }
   .tool3d { width: 96px; height: 96px; }
 }
+/* ─── Acronym meaning (under each tool title) ─── */
+.tool-meaning {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  margin-top: 0.7rem;
+  max-width: 52ch;
+}
+.tool-meaning b {
+  color: var(--accent);
+  font-weight: 700;
+  text-shadow: 0 0 14px rgba(52,211,153,0.28);
+}
+/* LaTeX wordmark */
+.latex {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: 0.96em;
+}
+.latex sup {
+  font-size: 0.72em;
+  vertical-align: 0.34em;
+  margin-left: -0.38em;
+  margin-right: -0.14em;
+}
+.latex sub {
+  font-size: 1em;
+  vertical-align: -0.28em;
+  margin-left: -0.1em;
+  margin-right: -0.06em;
+}
 .panel-header h2 {
   font-family: var(--font-head);
   font-size: clamp(1.8rem, 3.4vw, 2.9rem);
@@ -983,7 +1017,8 @@ footer p b { color: var(--accent); font-weight: 400; }
   position: fixed; bottom: 14px; left: 0; z-index: 40;
   width: 76px; height: 104px;
   --x: 60px;
-  transform: translateX(var(--x));
+  --y: 0px;              /* vertical offset — negative = climbed up */
+  transform: translate(var(--x), var(--y));
   display: none;
   cursor: pointer;
   --face: 1;             /* 1 = facing right, -1 = facing left */
@@ -1073,6 +1108,34 @@ footer p b { color: var(--accent); font-weight: 400; }
 #walker.fallen .w-dizzy { opacity: 1; animation: w-spin 1s linear infinite; }
 @keyframes w-spin { to { transform: rotate(360deg); } }
 
+/* ─── airborne: shrink + fade the shadow while off the floor ─── */
+#walker.airborne .walker-shadow { opacity: 0.16; transform: scaleX(0.55); }
+
+/* ─── jumping: a little stretch, limbs tuck ─── */
+#walker.jumping .walker-char { animation: none; }
+#walker.jumping .w-arm.left  { transform: rotate(38deg); }
+#walker.jumping .w-arm.right { transform: rotate(-38deg); }
+#walker.jumping .w-leg.left  { transform: rotate(12deg); }
+#walker.jumping .w-leg.right { transform: rotate(-12deg); }
+
+/* ─── sitting: legs dangle, arms rest, gentle sway ─── */
+#walker.sitting .walker-char {
+  animation: w-sit-sway 3.4s ease-in-out infinite;
+}
+@keyframes w-sit-sway {
+  0%, 100% { transform: scaleX(var(--face)) rotate(-1.6deg); }
+  50%      { transform: scaleX(var(--face)) rotate(1.6deg); }
+}
+#walker.sitting .w-arm.left  { transform: rotate(58deg);  transition: transform 0.4s; }
+#walker.sitting .w-arm.right { transform: rotate(-58deg); transition: transform 0.4s; }
+#walker.sitting .w-leg.left  { transform: rotate(8deg);   transition: transform 0.4s; }
+#walker.sitting .w-leg.right { transform: rotate(-6deg);  transition: transform 0.4s; }
+/* tiny dangling-foot sway while perched */
+#walker.sitting .w-leg.left  { animation: w-dangleA 1.8s ease-in-out infinite; }
+#walker.sitting .w-leg.right { animation: w-dangleB 2.1s ease-in-out infinite; }
+@keyframes w-dangleA { 0%,100% { transform: rotate(4deg); } 50% { transform: rotate(16deg); } }
+@keyframes w-dangleB { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(-12deg); } }
+
 .walker-bubble {
   position: absolute; bottom: 100px; left: 50%;
   transform: translate(-50%, 8px) scale(0.95);
@@ -1094,7 +1157,7 @@ footer p b { color: var(--accent); font-weight: 400; }
   .hint-desktop { display: none; }
   .hint-mobile { display: inline; }
   #nav-toggle { display: flex; }
-  #walker { transform: translateX(var(--x)) scale(0.8); transform-origin: left bottom; }
+  #walker { transform: translate(var(--x), var(--y)) scale(0.8); transform-origin: left bottom; }
   .ribbon-inner { position: relative; }
   .ribbon-tabs {
     position: absolute; top: 100%; left: 0; right: 0;
@@ -1157,9 +1220,9 @@ footer p b { color: var(--accent); font-weight: 400; }
       <li><a href="#" data-panel="publications">Publications</a></li>
       <li><a href="#" data-panel="engagement">Engagement</a></li>
       <li><a href="#" data-panel="affiliations">Affiliations</a></li>
-      <li><a href="#" class="tab-helix" data-panel="helix">HELIX <span class="helix-diamond">◆</span></a></li>
+      <li><a href="#" class="tab-helix" data-panel="helix">HELIX <span class="owl-emoji">🧬</span></a></li>
       <li><a href="#" class="tab-helix" data-panel="owl">OWL <span class="owl-emoji">🦉</span></a></li>
-      <li><a href="#" class="tab-helix" data-panel="scaffold">SCAFFOLD <span class="helix-diamond">◈</span></a></li>
+      <li><a href="#" class="tab-helix" data-panel="scaffold">SCAFFOLD <span class="owl-emoji">🧊</span></a></li>
     </ul>
     <div class="ribbon-right">
       <a href="mailto:dgs2153@columbia.edu" class="pill">
@@ -1639,6 +1702,7 @@ footer p b { color: var(--accent); font-weight: 400; }
             <div>
               <p class="ph-label">Tool · Live</p>
               <h2>HELIX <em>Image Analysis</em></h2>
+              <p class="tool-meaning"><b>H</b>igh-throughput <b>E</b>dge-length and <b>L</b>attice <b>I</b>maging e<b>X</b>plorer</p>
             </div>
             <div class="tool3d" aria-hidden="true"><canvas id="c3d-helix"></canvas></div>
           </div>
@@ -1777,6 +1841,7 @@ footer p b { color: var(--accent); font-weight: 400; }
             <div>
               <p class="ph-label">Tool · Live</p>
               <h2>OWL — <em>Overleaf → Word</em></h2>
+              <p class="tool-meaning"><b>O</b>verleaf · <b>W</b>ord · <span class="latex"><b>L</b><sup>a</sup>T<sub>e</sub>X</span></p>
             </div>
             <div class="tool3d" aria-hidden="true"><canvas id="c3d-owl"></canvas></div>
           </div>
@@ -1871,6 +1936,7 @@ footer p b { color: var(--accent); font-weight: 400; }
             <div>
               <p class="ph-label">Tool · Live</p>
               <h2>SCAFFOLD — <em>ScatterSim analysis for origami lattices</em></h2>
+              <p class="tool-meaning"><b>S</b>catterSim <b>C</b>omputational <b>A</b>nalysis <b>F</b>ramework <b>F</b>or <b>O</b>rigami <b>L</b>attice <b>D</b>esign</p>
             </div>
             <div class="tool3d" aria-hidden="true"><canvas id="c3d-scaffold"></canvas></div>
           </div>
@@ -2058,11 +2124,14 @@ document.getElementById('flip-card').addEventListener('click', function () {
 
 /* Tool tabs are open (no password gate). */
 
-/* ═══ WALKING AI MASCOT ═══ */
+/* ═══ WANDERING AI MASCOT ═══
+   Walks the page like a little person: strolls to random spots, climbs onto
+   words / cards, sits a while with dangling feet, then hops back down.       */
 (function () {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const walker = document.getElementById('walker');
   const bubble = document.getElementById('walker-bubble');
+
   const lines = [
     "Hi — I'm David's <b>AI twin</b>. Ask the real one about plasmonics.",
     "The <b>HELIX</b>, <b>OWL</b> and <b>SCAFFOLD</b> tabs run live in your browser. 🔬",
@@ -2070,8 +2139,15 @@ document.getElementById('flip-card').addEventListener('click', function () {
     "Grab his <b>CV</b> up top — it's worth a read. 📄",
     "Gold nanoparticles are basically tiny <b>antennas</b>. Neat, right?",
     "Built in Austria, tuned in Zürich, running in <b>New York</b>. 🗽",
-    "Still walking… unlike his overnight batch jobs. 😴",
+    "Off to explore the page… don't mind me. 🚶",
     "I'd wave, but I'm busy segmenting crystals."
+  ];
+  const perchLines = [
+    "Nice view from up here! 🧗",
+    "This word looks comfy. Mine now. 😌",
+    "Just gonna sit here a sec…",
+    "Best seat in the lab. 🔭",
+    "Perched. Carry on."
   ];
   const complaints = [
     "Ouch! Hey! 😵",
@@ -2080,77 +2156,195 @@ document.getElementById('flip-card').addEventListener('click', function () {
     "Down but not defeated! 💫"
   ];
 
-  // position state (px from left edge of the character)
-  let x = 40;
-  let dir = 1;                     // 1 = right, -1 = left
-  let speed = 0.55;                // px per frame
-  let fallen = false;
-  let lastT = 0;
-  const bottomWidth = () => window.innerWidth - 80;
+  /* ── geometry helpers ── */
+  const CHAR_W = 76;
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const floorMax = () => window.innerWidth - CHAR_W - 4;
+  // viewport-Y of the walker's bottom edge when --y = 0
+  const floorBottomY = () => window.innerHeight - 14;
 
-  function face(d) { walker.style.setProperty('--face', d); }
+  /* ── live state ── */
+  let x = 40, y = 0, faceDir = 1;
+  let state = 'idle';          // walk | climb | sit | drop | idle | fallen
+  let targetX = 120;
+  let perchEl = null;
+  let goingToPerch = false;
+  let sitUntil = 0, idleUntil = 0;
+  let jump = null;             // {t0,dur,x0,x1,y0,y1,peak}
+  let lastT = 0, raf = 0;
 
-  function frame(now) {
-    if (!lastT) lastT = now;
-    const dt = Math.min(now - lastT, 40); lastT = now;
-    if (!fallen) {
-      x += dir * speed * (dt / 16.7);
-      if (x > bottomWidth()) { x = bottomWidth(); dir = -1; face(-1); }
-      else if (x < 8) { x = 8; dir = 1; face(1); }
-      walker.style.setProperty('--x', x + 'px');
-    }
-    requestAnimationFrame(frame);
+  function setFace(d) { if (d !== faceDir) { faceDir = d; walker.style.setProperty('--face', d); } }
+  function apply() {
+    walker.style.setProperty('--x', x + 'px');
+    walker.style.setProperty('--y', y + 'px');
+    walker.classList.toggle('airborne', y < -8);
+  }
+  function pose(cls) {
+    walker.classList.remove('walking', 'jumping', 'sitting');
+    if (cls) walker.classList.add(cls);
   }
 
+  /* ── speech ── */
   let bi = -1;
   function say(txt) {
     bubble.innerHTML = txt;
-    // anchor bubble side depending on facing so it doesn't run off screen
-    bubble.classList.toggle('left-anchor', x > window.innerWidth * 0.6);
+    bubble.classList.toggle('left-anchor', x > window.innerWidth * 0.55);
     bubble.classList.add('show');
     clearTimeout(bubble._t);
-    bubble._t = setTimeout(() => bubble.classList.remove('show'), 4800);
-  }
-  function chatter() {
-    if (!fallen) { bi = (bi + 1) % lines.length; say(lines[bi]); }
-    scheduleChatter();
+    bubble._t = setTimeout(() => bubble.classList.remove('show'), 4600);
   }
   function scheduleChatter() {
-    const wait = 10000 + Math.random() * 5000; // 10–15s
-    clearTimeout(chatter._t);
-    chatter._t = setTimeout(chatter, wait);
+    clearTimeout(scheduleChatter._t);
+    scheduleChatter._t = setTimeout(() => {
+      if (state === 'walk' || state === 'idle') { bi = (bi + 1) % lines.length; say(lines[bi]); }
+      scheduleChatter();
+    }, 11000 + Math.random() * 6000);
   }
 
-  // click → fall, complain, get up after 3s
+  /* ── pick something to climb onto in the visible page ── */
+  function isPerchable(el) {
+    if (!el || el.offsetParent === null) return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 26 && r.width < window.innerWidth * 0.92 &&
+           r.top > 76 && r.top < window.innerHeight - 130 &&
+           r.bottom < window.innerHeight - 36;
+  }
+  function pickPerch() {
+    const sel = 'h1.name, .panel-header h2, .sc-card h3, .pub-card h3, .chip, .stat, .pill, .helix-title, .ph-label, .ribbon-brand span, .tool-meaning b, .hf-node b';
+    const scope = document.querySelector('.panel.active') || document;
+    const nodes = [...scope.querySelectorAll(sel)].filter(isPerchable);
+    if (!nodes.length) return null;
+    return nodes[Math.floor(Math.random() * nodes.length)];
+  }
+  function xForEl(el) {
+    const r = el.getBoundingClientRect();
+    return clamp(r.left + r.width / 2 - CHAR_W / 2, 6, floorMax());
+  }
+  function yForEl(el) {
+    const r = el.getBoundingClientRect();
+    return (r.top - 6) - floorBottomY();   // feet rest just on the element's top
+  }
+
+  /* ── state entries ── */
+  function startWalk() { state = 'walk'; pose('walking'); }
+  function startIdle(ms) {
+    state = 'idle'; pose(null); y = 0; apply();
+    idleUntil = performance.now() + (ms || (1400 + Math.random() * 2600));
+  }
+  function startJump(x1, y1, peak, next) {
+    state = 'climb'; pose('jumping');
+    setFace(x1 >= x ? 1 : -1);
+    jump = { t0: performance.now(), dur: 560, x0: x, x1, y0: y, y1, peak, next };
+  }
+  function startSit() {
+    state = 'sit'; pose('sitting');
+    sitUntil = performance.now() + (4200 + Math.random() * 5200);
+    if (Math.random() < 0.85) say(perchLines[Math.floor(Math.random() * perchLines.length)]);
+  }
+  function startDrop() {
+    // hop off in the current facing direction, land on the floor
+    const land = clamp(x + faceDir * (60 + Math.random() * 90), 6, floorMax());
+    perchEl = null; goingToPerch = false;
+    state = 'drop'; pose('jumping');
+    jump = { t0: performance.now(), dur: 560, x0: x, x1: land, y0: y, y1: 0, peak: 46, next: () => startIdle(700) };
+  }
+
+  /* ── decide what to do next ── */
+  function decide() {
+    if (Math.random() < 0.58) {
+      const el = pickPerch();
+      if (el) { perchEl = el; goingToPerch = true; targetX = xForEl(el); startWalk(); return; }
+    }
+    goingToPerch = false; perchEl = null;
+    targetX = clamp(30 + Math.random() * (floorMax() - 30), 6, floorMax());
+    startWalk();
+  }
+
+  /* ── main loop ── */
+  function frame(now) {
+    if (!lastT) lastT = now;
+    const dt = Math.min(now - lastT, 48); lastT = now;
+
+    if (state === 'walk') {
+      const dx = targetX - x;
+      const dist = Math.abs(dx);
+      setFace(dx >= 0 ? 1 : -1);
+      const step = 0.13 * dt;                 // ~130 px/s
+      if (dist <= step) {
+        x = targetX; apply();
+        if (goingToPerch && perchEl && isPerchable(perchEl)) {
+          startJump(xForEl(perchEl), yForEl(perchEl), 34, startSit);
+        } else {
+          startIdle();
+        }
+      } else {
+        x += Math.sign(dx) * step; apply();
+      }
+    }
+    else if (state === 'climb' || state === 'drop') {
+      const p = clamp((now - jump.t0) / jump.dur, 0, 1);
+      const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; // easeInOut
+      x = jump.x0 + (jump.x1 - jump.x0) * e;
+      y = jump.y0 + (jump.y1 - jump.y0) * e - jump.peak * Math.sin(Math.PI * p);
+      apply();
+      if (p >= 1) { y = jump.y1; x = jump.x1; apply(); const n = jump.next; jump = null; n && n(); }
+    }
+    else if (state === 'sit') {
+      if (!isPerchable(perchEl)) { startDrop(); }
+      else {
+        // stay glued to the word even as the page scrolls
+        x = xForEl(perchEl); y = yForEl(perchEl); apply();
+        if (now >= sitUntil) startDrop();
+      }
+    }
+    else if (state === 'idle') {
+      y = 0; apply();
+      if (now >= idleUntil) decide();
+    }
+
+    raf = requestAnimationFrame(frame);
+  }
+
+  /* ── click → topple over, then recover ── */
   walker.addEventListener('click', () => {
-    if (fallen) return;
-    fallen = true;
-    walker.classList.remove('walking');
+    if (state === 'fallen') return;
+    state = 'fallen';
+    y = 0; apply();
+    walker.classList.remove('walking', 'jumping', 'sitting', 'airborne');
     walker.classList.add('fallen');
     say(complaints[Math.floor(Math.random() * complaints.length)]);
     setTimeout(() => {
       walker.classList.remove('fallen');
-      walker.classList.add('walking');
-      fallen = false;
       say("Okay, back up! 💪");
+      startIdle(500);
     }, 3000);
+  });
+
+  window.addEventListener('resize', () => {
+    x = clamp(x, 6, floorMax());
+    if (state === 'walk') targetX = clamp(targetX, 6, floorMax());
+    apply();
   });
 
   function start() {
     walker.classList.add('show');
-    if (reduced) {                 // static, no walking, but still chatty on click
-      face(1);
-      walker.style.setProperty('--x', '40px');
+    setFace(1);
+    x = 40; y = 0; apply();
+    if (reduced) {                 // no wandering for reduced-motion, still chatty
       setTimeout(() => say(lines[0]), 600);
       return;
     }
-    walker.classList.add('walking');
-    face(1);
-    requestAnimationFrame(frame);
     setTimeout(() => say(lines[0]), 900);
+    startIdle(1600);
     scheduleChatter();
+    raf = requestAnimationFrame(frame);
   }
   setTimeout(start, 4200); // after intro settles
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
+    else if (!reduced && !raf) { lastT = 0; raf = requestAnimationFrame(frame); }
+  });
 })();
 
 /* ═══ TICKER — duplicate content for seamless loop ═══ */
