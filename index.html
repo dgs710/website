@@ -2534,14 +2534,14 @@ navToggle.addEventListener('click', () => {
     char.add(model);
     mixer = new THREE.AnimationMixer(model);
     g.animations.forEach((c) => {
-      // remove sideways root travel from fall/getup so he stays inside the canvas
-      if (c.name === 'fall' || c.name === 'getup') {
-        c.tracks.forEach((tr) => {
-          if (tr.name.endsWith('Hips.position')) {
-            for (let i = 0; i < tr.values.length; i += 3) { tr.values[i] = 0; tr.values[i + 2] = 0; }
-          }
-        });
-      }
+      // Remove horizontal root travel from EVERY clip (keep only vertical motion).
+      // Screen movement is driven by the page code; baked-in travel would make
+      // the walk loop snap back and the fall drift out of the canvas.
+      c.tracks.forEach((tr) => {
+        if (tr.name.endsWith('Hips.position')) {
+          for (let i = 0; i < tr.values.length; i += 3) { tr.values[i] = 0; tr.values[i + 2] = 0; }
+        }
+      });
       clips[c.name] = mixer.clipAction(c);
     });
     modelReady = true;
@@ -2557,6 +2557,7 @@ navToggle.addEventListener('click', () => {
     a.setLoop(opt.once ? THREE.LoopOnce : THREE.LoopRepeat, opt.once ? 1 : Infinity);
     a.clampWhenFinished = !!opt.once;
     a.timeScale = opt.speed || 1;
+    if (opt.startAt) a.time = opt.startAt;   // skip a clip's wind-up frames
     a.play();
     if (current && current !== a) current.crossFadeTo(a, opt.fade !== undefined ? opt.fade : 0.22, false);
     current = a;
@@ -2689,14 +2690,15 @@ navToggle.addEventListener('click', () => {
     const cx = r.left + r.width / 2;
     if (e.clientX < cx - 24 || e.clientX > cx + 24 || e.clientY < r.top + 8 || e.clientY > r.bottom) return;
     state = 'fallen'; y = 0; apply();
-    playClip('fall', { once: true, restart: true });
+    /* startAt skips the clip's ~0.5s standing wind-up so the hit feels instant */
+    playClip('fall', { once: true, restart: true, speed: 1.25, startAt: 0.35, fade: 0.08 });
     say(complaints[Math.floor(Math.random() * complaints.length)]);
     setTimeout(() => {
       state = 'getup';
       const d = playClip('getup', { once: true, speed: 2.1, restart: true });
       say(recoverLines[Math.floor(Math.random() * recoverLines.length)]);
       setTimeout(() => startIdle(600), Math.max(0.5, d - 0.15) * 1000);
-    }, 3400);
+    }, 3000);
   }, true);
 
   window.addEventListener('resize', () => {
