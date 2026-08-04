@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 264.13 121.86">
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 264.15 121.86">
   <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
   <defs>
     <style>
@@ -13,10 +13,6 @@
       }
 
       .st9 {
-        fill: #d52b1e;
-      }
-
-      .st10 {
         fill: #a98c4e;
       }
 
@@ -28,7 +24,7 @@
         stroke-linecap: round;
       }
 
-      .st1, .st2, .st4, .st5, .st6, .st11, .st7 {
+      .st1, .st2, .st4, .st5, .st6, .st10, .st7 {
         isolation: isolate;
       }
 
@@ -37,7 +33,7 @@
         stroke-width: 2.4px;
       }
 
-      .st12 {
+      .st11 {
         fill: #c69214;
       }
 
@@ -45,28 +41,32 @@
         stroke: #cdc6c0;
       }
 
+      .st12 {
+        fill: #b23a46;
+      }
+
       .st3 {
         stroke: #fff;
         stroke-width: 1.8px;
+      }
+
+      .st4, .st8 {
+        stroke: #b23a46;
       }
 
       .st13 {
         fill: #fff;
       }
 
-      .st4 {
-        stroke: #2e4a78;
-      }
-
       .st5 {
-        stroke: #9c3a3f;
+        stroke: #2e4a78;
       }
 
       .st6 {
         stroke: #8fa0b8;
       }
 
-      .st11 {
+      .st10 {
         fill: #0f1830;
         font-family: Georgia-Bold, Georgia;
         font-size: 106px;
@@ -78,45 +78,40 @@
       }
 
       .st8 {
-        stroke: #b23a46;
         stroke-width: 5px;
       }
     </style>
   </defs>
-  <line class="st5" x1="26.07" y1="107.16" x2="250.26" y2="49.56"/>
-  <line class="st1" x1="26.07" y1="107.16" x2="251.86" y2="61.05"/>
-  <line class="st2" x1="26.07" y1="107.16" x2="253.47" y2="72.54"/>
-  <line class="st6" x1="26.07" y1="107.16" x2="255.08" y2="84.02"/>
-  <line class="st7" x1="26.07" y1="107.16" x2="256.68" y2="95.51"/>
-  <line class="st4" x1="26.07" y1="107.16" x2="258.29" y2="107"/>
   <g>
-    <path class="st8" d="M6.62,88.18c-3.39,8.78,3.86,16.92,16.77,18.86"/>
-    <path class="st3" d="M6.62,88.18c-3.39,8.78,3.86,16.92,16.77,18.86"/>
-  </g>
-  <polygon class="st12" points="257.39 100.56 259.57 104.59 264.13 104.15 260.98 107.47 262.8 111.68 258.67 109.7 255.23 112.74 255.83 108.19 251.89 105.87 256.4 105.03 257.39 100.56"/>
-  <g>
-    <circle class="st13" cx="25.2" cy="106.82" r="4.37"/>
+    <line class="st4" x1="26.09" y1="107.08" x2="250.28" y2="49.48"/>
+    <line class="st1" x1="26.09" y1="107.08" x2="251.88" y2="60.97"/>
+    <line class="st2" x1="26.09" y1="107.08" x2="253.49" y2="72.46"/>
+    <line class="st6" x1="26.09" y1="107.08" x2="255.1" y2="83.94"/>
+    <line class="st7" x1="26.09" y1="107.08" x2="256.7" y2="95.43"/>
+    <line class="st5" x1="26.09" y1="107.08" x2="258.31" y2="106.92"/>
+    <path class="st8" d="M6.64,88.1c-3.39,8.78,3.86,16.92,16.77,18.86"/>
+    <path class="st3" d="M6.64,88.1c-3.39,8.78,3.86,16.92,16.77,18.86"/>
+    <polygon class="st11" points="257.41 100.48 259.59 104.51 264.15 104.07 261 107.39 262.82 111.6 258.69 109.62 255.25 112.66 255.85 108.11 251.91 105.79 256.42 104.95 257.41 100.48"/>
+    <circle class="st13" cx="25.22" cy="106.74" r="4.37"/>
     <g>
-      <g>
-        <rect class="st9" x="24.07" y="102.94" width="2.27" height="7.76" rx=".32" ry=".32"/>
-        <rect class="st9" x="21.32" y="105.69" width="7.76" height="2.27" rx=".32" ry=".32"/>
-      </g>
-      <g>
-        <rect class="st10" x="24.21" y="98.74" width="1.97" height="3.02" rx=".63" ry=".63"/>
-        <rect class="st10" x="26.97" y="100.14" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-73.34 75.23) rotate(-60)"/>
-        <rect class="st10" x="29.38" y="102.55" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-47.63 29.32) rotate(-30)"/>
-        <rect class="st10" x="30.26" y="105.84" width="3.02" height="1.97" rx=".63" ry=".63"/>
-        <rect class="st10" x="29.91" y="108.6" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-79.91 81.81) rotate(-60)"/>
-        <rect class="st10" x="27.5" y="111.01" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-52.44 29.32) rotate(-30)"/>
-        <rect class="st10" x="24.21" y="111.89" width="1.97" height="3.02" rx=".63" ry=".63"/>
-        <rect class="st10" x="20.4" y="111.53" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-86.49 75.23) rotate(-60)"/>
-        <rect class="st10" x="17.99" y="109.13" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-52.44 24.5) rotate(-30)"/>
-        <rect class="st10" x="17.11" y="105.84" width="3.02" height="1.97" rx=".63" ry=".63"/>
-        <rect class="st10" x="18.52" y="102.02" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-79.91 68.66) rotate(-60)"/>
-        <rect class="st10" x="20.93" y="99.62" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-47.63 24.5) rotate(-30)"/>
-        <circle class="st0" cx="25.2" cy="106.82" r="4.72"/>
-      </g>
+      <rect class="st12" x="24.09" y="102.86" width="2.27" height="7.76" rx=".32" ry=".32"/>
+      <rect class="st12" x="21.34" y="105.61" width="7.76" height="2.27" rx=".32" ry=".32"/>
+    </g>
+    <g>
+      <rect class="st9" x="24.23" y="98.66" width="1.97" height="3.02" rx=".63" ry=".63"/>
+      <rect class="st9" x="26.99" y="100.06" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-73.26 75.2) rotate(-60)"/>
+      <rect class="st9" x="29.4" y="102.47" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-47.59 29.31) rotate(-30)"/>
+      <rect class="st9" x="30.28" y="105.76" width="3.02" height="1.97" rx=".63" ry=".63"/>
+      <rect class="st9" x="29.93" y="108.52" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-79.83 81.79) rotate(-60)"/>
+      <rect class="st9" x="27.52" y="110.93" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-52.4 29.32) rotate(-30)"/>
+      <rect class="st9" x="24.23" y="111.81" width="1.97" height="3.02" rx=".63" ry=".63"/>
+      <rect class="st9" x="20.42" y="111.45" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-86.41 75.2) rotate(-60)"/>
+      <rect class="st9" x="18.01" y="109.05" width="3.02" height="1.97" rx=".63" ry=".63" transform="translate(-52.4 24.5) rotate(-30)"/>
+      <rect class="st9" x="17.13" y="105.76" width="3.02" height="1.97" rx=".63" ry=".63"/>
+      <rect class="st9" x="18.54" y="101.94" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-79.83 68.63) rotate(-60)"/>
+      <rect class="st9" x="20.95" y="99.53" width="1.97" height="3.02" rx=".63" ry=".63" transform="translate(-47.58 24.5) rotate(-30)"/>
+      <circle class="st0" cx="25.22" cy="106.74" r="4.72"/>
     </g>
   </g>
-  <text class="st11" transform="translate(0 89.72)"><tspan x="0" y="0">DGS</tspan></text>
+  <text class="st10" transform="translate(0 89.72)"><tspan x="0" y="0">DGS</tspan></text>
 </svg>
