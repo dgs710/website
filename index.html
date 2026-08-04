@@ -648,6 +648,21 @@ h1.name .grad {
   border-left: 2px solid var(--accent);
   flex-shrink: 1; flex-basis: 380px;
 }
+/* ─── Tool attribution credit (under each tool description) ─── */
+.ph-credit {
+  display: block; margin-top: 0.9rem; padding-top: 0.7rem;
+  border-top: 1px dashed var(--line);
+  font-family: var(--font-mono); font-size: 0.58rem;
+  letter-spacing: 0.05em; line-height: 1.8; color: var(--ink-muted);
+}
+.ph-credit a { color: var(--accent-2); text-decoration: none; border-bottom: 1px dotted rgba(110,231,183,0.45); }
+.ph-credit a:hover { color: var(--accent); }
+footer .credits {
+  flex-basis: 100%; text-transform: none; letter-spacing: 0.04em;
+  font-size: 0.6rem; line-height: 1.9; color: var(--ink-muted);
+}
+footer .credits a { color: var(--accent-2); text-decoration: none; }
+footer .credits a:hover { color: var(--accent); }
 .panel-body {
   padding: clamp(1.6rem, 3.5vh, 2.4rem) 0 clamp(2.4rem, 5vh, 3.6rem);
   display: grid;
@@ -1838,6 +1853,11 @@ footer p b { color: var(--accent); font-weight: 400; }
             Crystal-Tools v8 · From <b style="color:var(--ink-mid);">11,160</b> optical-microscopy
             images to one melting temperature per well — segmented, measured and fitted
             automatically. CFN Automated Image Analysis.
+            <span class="ph-credit">Original tool © 2026 D. G. Schauer · crystal segmentation
+            builds on <a href="https://doi.org/10.48550/arXiv.2304.02643" target="_blank" rel="noopener">SAM</a>
+            (Kirillov et al., Meta AI) &amp;
+            <a href="https://doi.org/10.48550/arXiv.2306.12156" target="_blank" rel="noopener">FastSAM</a>
+            (Zhao et al., CASIA) — with thanks to their developers.</span>
           </p>
         </div>
 
@@ -1978,6 +1998,10 @@ footer p b { color: var(--accent); font-weight: 400; }
             LaTeX sources, download an editable <code style="color:var(--accent-2);">.docx</code>
             — fonts, figures, equations and ACS citations carried across, bundled
             with your PDF and sources.
+            <span class="ph-credit">Original tool © 2026 D. G. Schauer · powered by the
+            open-source <a href="https://pandoc.org" target="_blank" rel="noopener">pandoc</a> &amp;
+            <a href="https://python-docx.readthedocs.io" target="_blank" rel="noopener">python-docx</a>
+            — with thanks to their developers.</span>
           </p>
         </div>
 
@@ -2076,6 +2100,11 @@ footer p b { color: var(--accent); font-weight: 400; }
             <code style="color:var(--accent-2);">S(q) = I/P<sub>fit</sub></code>,
             peak detection, cubic (SC/BCC/FCC) indexing with (hkl) labels, and
             full-resolution ScatterSim crystal fits.
+            <span class="ph-credit">Original tool © 2026 D. G. Schauer · simulation engine:
+            <a href="https://github.com/CFN-softbio/ScatterSim" target="_blank" rel="noopener">ScatterSim</a>
+            by K. G. Yager et al. (Brookhaven National Laboratory) —
+            <a href="https://doi.org/10.1107/S160057671302832X" target="_blank" rel="noopener">Yager
+            et al., J. Appl. Cryst. 47, 118–129 (2014)</a> — with thanks to its developers.</span>
           </p>
         </div>
 
@@ -2159,6 +2188,13 @@ footer p b { color: var(--accent); font-weight: 400; }
   <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
     <p>© 2026 David G. Schauer <b>·</b> New York City</p>
     <p>Plasmonics <b>·</b> Spectroscopy <b>·</b> Nanoscience</p>
+    <p class="credits">HELIX <b>·</b> OWL <b>·</b> SCAFFOLD <b>·</b> MOSAXS are original works
+    of the author — all rights reserved. HELIX builds on
+    <a href="https://doi.org/10.48550/arXiv.2304.02643" target="_blank" rel="noopener">SAM</a> &amp;
+    <a href="https://doi.org/10.48550/arXiv.2306.12156" target="_blank" rel="noopener">FastSAM</a>;
+    SCAFFOLD on <a href="https://github.com/CFN-softbio/ScatterSim" target="_blank" rel="noopener">ScatterSim</a>
+    (<a href="https://doi.org/10.1107/S160057671302832X" target="_blank" rel="noopener">Yager et al., 2014</a>)
+    — with gratitude to their developers.</p>
   </div>
 </footer>
 
