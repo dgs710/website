@@ -1322,6 +1322,7 @@ footer p b { color: var(--accent); font-weight: 400; }
       <li><a href="#" class="tab-helix" data-panel="helix">HELIX <span class="owl-emoji">🧬</span></a></li>
       <li><a href="#" class="tab-helix" data-panel="owl">OWL <span class="owl-emoji">🦉</span></a></li>
       <li><a href="#" class="tab-helix" data-panel="scaffold">SCAFFOLD <span class="owl-emoji">🧊</span></a></li>
+      <li><a href="#" class="tab-helix" data-panel="echo">ECHO <span class="owl-emoji">🔊</span></a></li>
     </ul>
     <div class="ribbon-right">
       <a href="mailto:david@dgschauer.com" class="pill">
@@ -1499,8 +1500,8 @@ footer p b { color: var(--accent); font-weight: 400; }
         </div>
         <div class="stat">
           <div class="stat-inner">
-            <div class="stat-face stat-front"><b data-count="4">0</b><span>Research Tools Built</span></div>
-            <div class="stat-face stat-back"><em>HELIX 🧬</em><em>OWL 🦉</em><em>SCAFFOLD 🧊</em><em>MOSAXS 🩻</em></div>
+            <div class="stat-face stat-front"><b data-count="5">0</b><span>Research Tools Built</span></div>
+            <div class="stat-face stat-back"><em>HELIX 🧬</em><em>OWL 🦉</em><em>SCAFFOLD 🧊</em><em>MOSAXS 🩻</em><em>ECHO 🔊</em></div>
           </div>
         </div>
         <div class="stat">
@@ -2182,18 +2183,109 @@ footer p b { color: var(--accent); font-weight: 400; }
     </div>
   </div>
 
+  <!-- ═════════ ECHO ═════════ -->
+  <div class="panel" id="panel-echo">
+    <div class="wrap">
+
+      <div id="echo-app" class="helix-app">
+        <div class="panel-header">
+          <div class="ph-head">
+            <div>
+              <p class="ph-label">Tool · Live</p>
+              <h2>ECHO</h2>
+              <p class="tool-meaning"><b>E</b>xtract · <b>C</b>onvert · <b>H</b>armonize · <b>O</b>rder</p>
+            </div>
+            <div class="tool3d" aria-hidden="true"><canvas id="c3d-echo"></canvas></div>
+          </div>
+          <p class="ph-desc">
+            Recorded an audiobook in WhatsApp voice messages? Drop the
+            <code style="color:var(--accent-2);">.zip</code> of
+            <code style="color:var(--accent-2);">.mp4</code> recordings in and get back
+            upload-ready MP3s — numbered chronologically, <b style="color:var(--ink-mid);">192 kbps
+            CBR · 44.1 kHz · mono</b>, metadata stripped, every file verified, with a full
+            <code style="color:var(--accent-2);">mapping.csv</code>.
+            <span class="ph-credit">Original tool © 2026 D. G. Schauer · audio conversion by the
+            open-source <a href="https://ffmpeg.org" target="_blank" rel="noopener">FFmpeg</a> project
+            (LAME MP3 encoder) — with thanks to its developers.</span>
+          </p>
+        </div>
+
+        <div class="helix-doc">
+
+          <!-- Launch -->
+          <div class="helix-launch reveal">
+            <div class="helix-status" id="echo-status">
+              <span class="dot-live on"></span> Live — opens in a new tab
+            </div>
+            <p class="helix-launch-desc">
+              ECHO runs as its own small web app. Click below to open it, enter the
+              access password, name your audiobook, and drop the recordings in —
+              you review the detected chronological order <b style="color:var(--ink-mid);">before</b>
+              anything is converted.
+            </p>
+            <a href="https://echo-app.streamlit.app" target="_blank" rel="noopener" id="echo-launch-btn" class="pill solid">
+              Launch ECHO →
+            </a>
+          </div>
+
+          <!-- What you get -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">What you get</span>
+            <h3>Platform-ready audio — in the right order</h3>
+            <p>One zip in, one zip out.</p>
+          </div>
+          <div class="owl-modes">
+            <div class="owl-mode reveal">
+              <span class="owl-mode-tag g">01.mp3 … NN.mp3</span>
+              <p>Every recording renamed to clean zero-padded numbers in <b>exact
+                 chronological order</b> — read from the WhatsApp filename timestamps
+                 (both naming styles), with the zip's file-modified times as fallback.
+                 The audio itself is untouched: one single lossy pass, no trimming or
+                 normalizing.</p>
+            </div>
+            <div class="owl-mode reveal">
+              <span class="owl-mode-tag">Verified &amp; documented</span>
+              <p>Each output is checked twice — duration must match the source and the
+                 file must really be <b>192k CBR / 44.1 kHz / mono</b> — and a
+                 <code>mapping.csv</code> ties every number back to its original file,
+                 timestamp and duration, with your audiobook title on every row.</p>
+            </div>
+          </div>
+
+          <!-- Workflow -->
+          <div class="helix-phase reveal">
+            <span class="hp-num">The workflow</span>
+            <h3>Three steps, one download</h3>
+          </div>
+          <div class="owl-flow reveal">
+            <div class="owl-step"><b>1</b><div><h4>Name &amp; upload</h4><p>Enter the audiobook title (and author), then drop in the <code>.zip</code> of recordings — several zips at once are merged into one book.</p></div></div>
+            <div class="owl-step"><b>2</b><div><h4>Review the order</h4><p>ECHO shows every file, its timestamp, and how it was ordered — check the sequence <b>before</b> converting.</p></div></div>
+            <div class="owl-step"><b>3</b><div><h4>Convert &amp; download</h4><p>One click converts and verifies everything, then hands you a single <code>.zip</code> named after your book: the numbered MP3s + <code>mapping.csv</code>.</p></div></div>
+          </div>
+
+          <p class="helix-footline reveal">
+            Powered by FFmpeg + LAME &nbsp;·&nbsp; single lossy pass, audio untouched &nbsp;·&nbsp; runs free on Streamlit Cloud
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </main>
 
 <footer>
   <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
     <p>© 2026 David G. Schauer <b>·</b> New York City</p>
     <p>Plasmonics <b>·</b> Spectroscopy <b>·</b> Nanoscience</p>
-    <p class="credits">HELIX <b>·</b> OWL <b>·</b> SCAFFOLD <b>·</b> MOSAXS are original works
+    <p class="credits">HELIX <b>·</b> OWL <b>·</b> SCAFFOLD <b>·</b> MOSAXS <b>·</b> ECHO are original works
     of the author — all rights reserved. HELIX builds on
     <a href="https://doi.org/10.48550/arXiv.2304.02643" target="_blank" rel="noopener">SAM</a> &amp;
     <a href="https://doi.org/10.48550/arXiv.2306.12156" target="_blank" rel="noopener">FastSAM</a>;
     SCAFFOLD on <a href="https://github.com/CFN-softbio/ScatterSim" target="_blank" rel="noopener">ScatterSim</a>
-    (<a href="https://doi.org/10.1107/S160057671302832X" target="_blank" rel="noopener">Yager et al., 2014</a>)
+    (<a href="https://doi.org/10.1107/S160057671302832X" target="_blank" rel="noopener">Yager et al., 2014</a>);
+    ECHO on <a href="https://ffmpeg.org" target="_blank" rel="noopener">FFmpeg</a>
     — with gratitude to their developers.</p>
   </div>
 </footer>
@@ -2584,10 +2676,31 @@ document.querySelectorAll('.stat').forEach((el) => {
     scene.add(g); return g;
   }
 
+  // ---- ECHO: pulsing core emitting expanding sound-wave rings ----
+  function buildEcho(scene) {
+    const g = new THREE.Group();
+    const core = new THREE.Mesh(
+      new THREE.SphereGeometry(0.42, 24, 24),
+      new THREE.MeshStandardMaterial({ color: EM, roughness: 0.3, metalness: 0.3, emissive: 0x0c3b2b, emissiveIntensity: 0.6 }));
+    g.add(core); g.userData.core = core;
+    g.userData.rings = [];
+    for (let i = 0; i < 4; i++) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(1, 0.045, 12, 64),
+        new THREE.MeshStandardMaterial({ color: i % 2 ? EM2 : EM, roughness: 0.4, metalness: 0.2,
+                                         emissive: 0x0c3b2b, emissiveIntensity: 0.5,
+                                         transparent: true, opacity: 0.8 }));
+      ring.userData.phase = i / 4;
+      g.add(ring); g.userData.rings.push(ring);
+    }
+    g.rotation.x = 0.35; scene.add(g); return g;
+  }
+
   const scenes = [
     Object.assign(make('c3d-helix', 6.2, buildHelix) || {}, { kind: 'helix' }),
     Object.assign(make('c3d-scaffold', 6.6, buildLattice) || {}, { kind: 'lattice' }),
-    Object.assign(make('c3d-owl', 4.3, buildOwl) || {}, { kind: 'owl' })
+    Object.assign(make('c3d-owl', 4.3, buildOwl) || {}, { kind: 'owl' }),
+    Object.assign(make('c3d-echo', 6.0, buildEcho) || {}, { kind: 'echo' })
   ].filter(s => s.renderer);
 
   function update(s, t) {
@@ -2599,6 +2712,17 @@ document.querySelectorAll('.stat').forEach((el) => {
       s.obj.rotation.y = Math.sin(t * 0.7) * 0.55;
       const flap = Math.max(0, Math.sin(t * 1.1)) * 0.4;
       s.obj.children.forEach(c => { if (c.geometry && c.material && c.material.color && c.material.color.getHex() === 0x1c6b52) { c.rotation.z = (c.position.x > 0 ? 1 : -1) * (0.25 + flap); } });
+    }
+    else if (s.kind === 'echo') {
+      s.obj.rotation.y = t * 0.35;
+      const beat = 1 + Math.sin(t * 3.2) * 0.08;
+      s.obj.userData.core.scale.setScalar(beat);
+      for (const ring of s.obj.userData.rings) {
+        const ph = (t * 0.35 + ring.userData.phase) % 1;
+        const r = 0.55 + ph * 1.75;
+        ring.scale.setScalar(r);
+        ring.material.opacity = 0.85 * (1 - ph);
+      }
     }
   }
 
